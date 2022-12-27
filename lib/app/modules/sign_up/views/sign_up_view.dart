@@ -1,5 +1,5 @@
 import 'package:chat/app/helpers/helpers.dart';
-import 'package:chat/app/modules/widgets/widgets.dart';
+import 'package:chat/app/modules/common/widgets/widgets.dart';
 import 'package:chat/app/util/constants/app_image.dart';
 import 'package:chat/app/util/constants/textconst.dart';
 import 'package:flutter/material.dart';

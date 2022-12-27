@@ -1,7 +1,5 @@
 import 'package:chat/app/helpers/helpers.dart';
-import 'package:chat/app/modules/widgets/app_button.dart';
-import 'package:chat/app/modules/widgets/app_rich_text.dart';
-import 'package:chat/app/modules/widgets/form_input_field.dart';
+import 'package:chat/app/modules/common/widgets/widgets.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:chat/app/util/constants/app_image.dart';
 import 'package:chat/app/util/theme/app_colors.dart';
