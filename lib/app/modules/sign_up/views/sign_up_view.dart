@@ -48,21 +48,14 @@ class SignUpView extends GetView<SignUpController> {
                     ),
                   ),
                   SizedBox(
-                    height: 13.h,
-                  ),
-                  Text(
-                    KeyConst.pleaseEnterInformation.tr,
-                    style: theme.textTheme.headline2,
-                  ),
-                  SizedBox(
                     height: 25.h,
                   ),
                   FormInputField(
-                    controller: controller.usernameCtrl,
+                    controller: controller.emailCtrl,
                     maxLines: 1,
-                    hintText: KeyConst.userName.tr,
+                    hintText: KeyConst.email.tr,
                     validator: (value) {
-                      return Validator().username(value);
+                      return Validator().email(value);
                     },
                   ),
                   SizedBox(
@@ -74,6 +67,17 @@ class SignUpView extends GetView<SignUpController> {
                     hintText: KeyConst.fullName.tr,
                     validator: (value) {
                       return Validator().name(value);
+                    },
+                  ),
+                  SizedBox(
+                    height: 16.h,
+                  ),
+                  FormInputField(
+                    controller: controller.profileNameCtrl,
+                    maxLines: 1,
+                    hintText: KeyConst.profileName.tr,
+                    validator: (value) {
+                      return Validator().notEmpty(value);
                     },
                   ),
                   SizedBox(
@@ -124,6 +128,9 @@ class SignUpView extends GetView<SignUpController> {
                     height: 16.h,
                   ),
                   AppButton(
+                    onTap:() {
+                      controller.signUp();
+                    },
                     title: KeyConst.signUp.tr,
                   ),
                   SizedBox(

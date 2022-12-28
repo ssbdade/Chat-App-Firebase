@@ -59,11 +59,11 @@ class LoginView extends GetView<LoginController> {
                     height: 25.h,
                   ),
                   FormInputField(
-                    controller: controller.usernameCtrl,
+                    controller: controller.emailCtrl,
                     maxLines: 1,
-                    hintText: KeyConst.userName.tr,
+                    hintText: KeyConst.email.tr,
                     validator: (value) {
-                      return Validator().username(value);
+                      return Validator().email(value);
                     },
                   ),
                   SizedBox(
@@ -84,7 +84,7 @@ class LoginView extends GetView<LoginController> {
                               const Icon(Icons.visibility_off)
                       ),
                       validator: (value) {
-                        return Validator().password(value);
+                        return Validator().notEmpty(value);
                       },
                     ),
                   ),
@@ -110,7 +110,8 @@ class LoginView extends GetView<LoginController> {
                   ),
                   AppButton(
                     title: KeyConst.login.tr,
-                    onTap: () {
+                    onTap: () async {
+                      await controller.signIn();
                       Get.offNamed(Routes.HOME);
                     },
                   ),
