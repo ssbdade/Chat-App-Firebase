@@ -22,11 +22,14 @@ const Map<String, String> vi_VN = {
   KeyConst.dontHaveAccount: 'Chưa có tài khoản',
   KeyConst.alreadyHaveAccount: 'Đã có tài khoản',
   KeyConst.signUp: 'Đăng ký',
+  KeyConst.profileName: 'Tên người dùng',
   'validator.name': 'Tên không hợp lệ',
   'validator.number': '',
   'validator.username': 'Tên dăng nhập không hợp lệ',
   'validator.password': 'Mật khẩu không hợp lệ',
   'validator.confirmPassword': 'Mật khẩu không trùng khớp',
+  'validator.empty': "Không được để trống trường này",
+
 
 
 

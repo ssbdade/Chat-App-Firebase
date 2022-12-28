@@ -1,8 +1,8 @@
+import 'package:chat/app/modules/common/widgets/widgets.dart';
 import 'package:chat/app/util/constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../widgets/widgets.dart';
 
 class PasswordField extends StatefulWidget {
   const PasswordField({Key? key}) : super(key: key);
