@@ -1,12 +1,14 @@
+import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/models.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart' as auth;
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 
 
 
-class Auth {
+class Auth extends GetxService {
+  static Auth get to => Get.find();
   final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
   final firebaseUser = auth.FirebaseAuth.instance.currentUser;
 
@@ -19,10 +21,11 @@ class Auth {
       auth.UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
       auth.User? user = result.user;
+      AppPreference().saveUid(user!.uid);
       return _userFromFirebaseUser(user);
-    } catch (e) {
-      Logger.info(e.toString());
-      return null;
+    } on auth.FirebaseAuthException catch (e) {
+      Logger.info(e.code);
+      return e;
     }
   }
 
@@ -31,17 +34,19 @@ class Auth {
       auth.UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       auth.User? user = result.user;
+      AppPreference().saveUid(user!.uid);
       postNewUserToFireStore(fullName, profileName, result.user);
       return _userFromFirebaseUser(user);
-    } catch (e) {
-      Logger.info(e.toString());
-      return null;
+    } on auth.FirebaseAuthException catch (e) {
+      Logger.info(e.code);
+      return e;
     }
   }
 
   //signing out from the app
   Future signOut() async {
     try {
+      AppPreference().clear();
       return await _auth.signOut();
     } catch (e) {
       Logger.info(e.toString());
@@ -60,7 +65,7 @@ class Auth {
       avatarUrl: "asdasdasdasd",
     );
     try {
-      await FirebaseFirestore.instance.collection('users').add(userModel.toMap());
+      await firebaseFirestore.collection('users').add(userModel.toMap());
     }
     catch(e) {
       Logger.info(e.toString());

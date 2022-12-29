@@ -11,6 +11,8 @@ abstract class Routes {
   static const MESSAGE = _Paths.MESSAGE;
   static const FRIENDS = _Paths.FRIENDS;
   static const ACCOUNT = _Paths.ACCOUNT;
+  static const SAERCH = _Paths.SAERCH;
+  static const SEARCH = _Paths.SEARCH;
 }
 
 abstract class _Paths {
@@ -21,4 +23,6 @@ abstract class _Paths {
   static const MESSAGE = '/message';
   static const FRIENDS = '/friends';
   static const ACCOUNT = '/account';
+  static const SAERCH = '/saerch';
+  static const SEARCH = '/search';
 }

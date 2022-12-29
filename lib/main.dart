@@ -1,3 +1,4 @@
+import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/util/lang/translation_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,7 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await AppPreference().init();
   runApp(const MyApp());
 }
 

@@ -1,3 +1,5 @@
+import 'package:chat/app/data/response/auth.dart';
+import 'package:chat/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
 class AccountController extends GetxController {
@@ -20,4 +22,11 @@ class AccountController extends GetxController {
   }
 
   void increment() => count.value++;
+
+
+  logOut() async {
+    Get.put(Auth());
+    Auth.to.signOut();
+    Get.offNamed(Routes.LOGIN);
+  }
 }
