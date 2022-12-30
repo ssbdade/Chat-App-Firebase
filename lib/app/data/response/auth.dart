@@ -21,6 +21,8 @@ class Auth extends GetxService {
       auth.UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
       auth.User? user = result.user;
+      // UserModel userModel = UserModel.fromMap(result);
+      // Logger.info(userModel.friends![0].fullName!);
       AppPreference().saveUid(user!.uid);
       return _userFromFirebaseUser(user);
     } on auth.FirebaseAuthException catch (e) {
@@ -65,7 +67,7 @@ class Auth extends GetxService {
       avatarUrl: "asdasdasdasd",
     );
     try {
-      await firebaseFirestore.collection('users').add(userModel.toMap());
+      await firebaseFirestore.collection('users').doc(user.uid).set(userModel.toMap());
     }
     catch(e) {
       Logger.info(e.toString());

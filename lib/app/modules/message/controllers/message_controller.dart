@@ -1,3 +1,4 @@
+import 'package:chat/app/data/response/friends.dart';
 import 'package:get/get.dart';
 
 class MessageController extends GetxController {
@@ -6,6 +7,7 @@ class MessageController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
+    AccountRepo().getAccountInfo();
     super.onInit();
   }
 
