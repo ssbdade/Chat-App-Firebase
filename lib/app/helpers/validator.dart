@@ -34,7 +34,7 @@ class Validator {
   }
 
   String? name(String? value) {
-    String pattern = r"^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$";
+    String pattern = r"(^[A-Za-z]{3,16})([ ]{0,1})([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})?([ ]{0,1})?([A-Za-z]{3,16})";
     RegExp regex = RegExp(pattern);
     if (!regex.hasMatch(value!)) {
       return 'validator.name'.tr;
@@ -74,9 +74,7 @@ class Validator {
   }
 
   String? notEmpty(String? value) {
-    String pattern = r'^\S+$';
-    RegExp regex = RegExp(pattern);
-    if (!regex.hasMatch(value!)) {
+    if (value == '') {
       return 'validator.notEmpty'.tr;
     } else {
       return null;

@@ -10,7 +10,7 @@ const Map<String, String> vi_VN = {
   'light':'Sáng',
   'home_string_1': 'Xin chào',
   KeyConst.welcomeToBizflyChat: 'Chào mừng đến với Bizfly Chat',
-  KeyConst.welcomeToSignBizflyChat: 'Chào mừng bạn đã đăng ký Bizfly Chat',
+  KeyConst.welcomeToSignBizflyChat: 'Cảm ơn bạn đã đăng ký Bizfly Chat',
   KeyConst.pleaseLogin: 'Vui lòng đăng nhập',
   KeyConst.pleaseEnterInformation: 'Vui lòng nhập thông tin',
   KeyConst.userName: 'Tên đăng nhập',
@@ -26,11 +26,14 @@ const Map<String, String> vi_VN = {
   'validator.name': 'Tên không hợp lệ',
   'validator.number': '',
   'validator.username': 'Tên dăng nhập không hợp lệ',
-  'validator.password': 'Mật khẩu không hợp lệ',
+  'validator.password': 'Mật khẩu phải ít nhất 8 ký tự gồm in thường, in hoa và chữ số',
   'validator.confirmPassword': 'Mật khẩu không trùng khớp',
-  'validator.empty': "Không được để trống trường này",
-
-
+  'validator.notEmpty': "Không được để trống trường này",
+  'validator.email': "Email không hợp lệ",
+  'wrong-password': 'Sai mật khẩu',
+  'user-not-found': 'Không tìm thấy email',
+  'too-many-requests': 'Quá nhiều yêu cầu, vui lòng đợi 30s',
+  'email-already-in-use': 'Email đã được sử dụng',
 
 
 };

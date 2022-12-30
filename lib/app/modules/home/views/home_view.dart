@@ -26,7 +26,7 @@ class HomeView extends GetView<HomeController> {
   Widget build(BuildContext context) {
     return Obx(
         () => Scaffold(
-        appBar: controller.bottomIndex.value != 2 ? appBar() : accountAppBar(),
+        appBar: controller.bottomIndex.value != 2 ? appBar(context) : accountAppBar(),
         body: PageView(
           controller: pageController,
           onPageChanged: onPageChanged,
