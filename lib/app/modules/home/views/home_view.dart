@@ -53,7 +53,7 @@ class HomeView extends GetView<HomeController> {
                   color: Colors.white,
                   width: 2.0,
                 ),
-                color: red
+                color: blue
               ),
             ),
             SizedBox(width: width(7)),
@@ -63,7 +63,6 @@ class HomeView extends GetView<HomeController> {
                     color: Colors.white,//HexColor('#F7F7FC'),
                     child: TextFormField(
                         onChanged: (text) {
-
                         },
                         decoration: InputDecoration(
                           border: const OutlineInputBorder(
