@@ -1,28 +1,28 @@
+import 'package:chat/app/util/common/logger.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   //TODO: Implement LoginController
-  TextEditingController usernameCtrl = TextEditingController();
+  TextEditingController emailCtrl = TextEditingController();
   TextEditingController passwordCtrl = TextEditingController();
 
   final obscureText = true.obs;
 
-  final count = 0.obs;
-  @override
-  void onInit() {
-    super.onInit();
-  }
+  Future signIn() async {
+    try {
+      await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailCtrl.text.trim(),
+          password: passwordCtrl.text.trim());
+      final user = FirebaseAuth.instance.currentUser!;
+      print(user.email);
+    }
+    catch(e) {
+      Logger.info('loi roi');
+      Logger.info(e.toString());
+    }
 
-  @override
-  void onReady() {
-    super.onReady();
   }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  void increment() => count.value++;
 }
