@@ -17,136 +17,147 @@ class SignUpView extends GetView<SignUpController> {
     var theme = Theme.of(context);
     return Scaffold(
       body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Image.asset(
-                  AppImage.loginBg,
-                  height: 188.h,
-                ),
-                Positioned(
-                    bottom: 0,
-                    left: 25.w,
-                    child: SvgPicture.asset(AppImage.logo2)),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.only(left: 25.w, right: 25.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+        child: Form(
+          key: controller.formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
                 children: [
-                  SizedBox(
-                    height: 5.h,
+                  Image.asset(
+                    AppImage.loginBg,
+                    height: 188.h,
                   ),
-                  SizedBox(
-                    width: 277,
-                    child: Text(
-                      KeyConst.welcomeToSignBizflyChat.tr,
-                      style: theme.textTheme.headline1,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 25.h,
-                  ),
-                  FormInputField(
-                    controller: controller.emailCtrl,
-                    maxLines: 1,
-                    hintText: KeyConst.email.tr,
-                    validator: (value) {
-                      return Validator().email(value);
-                    },
-                  ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  FormInputField(
-                    controller: controller.fullNameCtrl,
-                    maxLines: 1,
-                    hintText: KeyConst.fullName.tr,
-                    validator: (value) {
-                      return Validator().name(value);
-                    },
-                  ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  FormInputField(
-                    controller: controller.profileNameCtrl,
-                    maxLines: 1,
-                    hintText: KeyConst.profileName.tr,
-                    validator: (value) {
-                      return Validator().notEmpty(value);
-                    },
-                  ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  Obx(
-                    () => FormInputField(
-                      controller: controller.passwordCtrl,
-                      hintText: KeyConst.password.tr,
-                      obscureText: controller.obscureText.value,
-                      maxLines: 1,
-                      suffixIcon: GestureDetector(
-                          onTap: () {
-                            controller.obscureText.value =
-                                !controller.obscureText.value;
-                          },
-                          child: controller.obscureText.value
-                              ? const Icon(Icons.visibility)
-                              : const Icon(Icons.visibility_off)),
-                      validator: (value) {
-                        return Validator().password(value);
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  Obx(
-                    () => FormInputField(
-                      controller: controller.confirmPasswordCtrl,
-                      hintText: KeyConst.repeatPassword.tr,
-                      obscureText: controller.obscureText.value,
-                      maxLines: 1,
-                      suffixIcon: GestureDetector(
-                          onTap: () {
-                            controller.obscureText.value =
-                                !controller.obscureText.value;
-                          },
-                          child: controller.obscureText.value
-                              ? const Icon(Icons.visibility)
-                              : const Icon(Icons.visibility_off)),
-                      validator: (value) {
-                        return Validator().confirmPassword(value, controller.passwordCtrl.text);
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  AppButton(
-                    onTap:() {
-                      controller.signUp();
-                    },
-                    title: KeyConst.signUp.tr,
-                  ),
-                  SizedBox(
-                    height: 16.h,
-                  ),
-                  AppRichText(
-                    onTap: () {
-                      Get.back();
-                    },
-                    firstText: "${KeyConst.alreadyHaveAccount.tr}?",
-                    secondText: "${KeyConst.login.tr}!",
-                  ),
+                  Positioned(
+                      bottom: 0,
+                      left: 25.w,
+                      child: SvgPicture.asset(AppImage.logo2)),
                 ],
               ),
-            ),
-          ],
+              Padding(
+                padding: EdgeInsets.only(left: 25.w, right: 25.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(
+                      height: 5.h,
+                    ),
+                    SizedBox(
+                      width: 277,
+                      child: Text(
+                        KeyConst.welcomeToSignBizflyChat.tr,
+                        style: theme.textTheme.headline1,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                    ),
+                    FormInputField(
+                      controller: controller.emailCtrl,
+                      maxLines: 1,
+                      hintText: KeyConst.email.tr,
+                      validator: (value) {
+                        return Validator().notEmpty(value) ??
+                            Validator().email(value);
+                      },
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    FormInputField(
+                      controller: controller.fullNameCtrl,
+                      maxLines: 1,
+                      hintText: KeyConst.fullName.tr,
+                      validator: (value) {
+                        return Validator().notEmpty(value) ??
+                            Validator().name(value);
+                      },
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    FormInputField(
+                      controller: controller.profileNameCtrl,
+                      maxLines: 1,
+                      hintText: KeyConst.profileName.tr,
+                      validator: (value) {
+                        return Validator().notEmpty(value);
+                      },
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    Obx(
+                      () => FormInputField(
+                        controller: controller.passwordCtrl,
+                        hintText: KeyConst.password.tr,
+                        obscureText: controller.obscureText.value,
+                        maxLines: 1,
+                        suffixIcon: GestureDetector(
+                            onTap: () {
+                              controller.obscureText.value =
+                                  !controller.obscureText.value;
+                            },
+                            child: controller.obscureText.value
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off)),
+                        validator: (value) {
+                          return Validator().notEmpty(value) ??
+                              Validator().password(value);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    Obx(
+                      () => FormInputField(
+                        controller: controller.confirmPasswordCtrl,
+                        hintText: KeyConst.repeatPassword.tr,
+                        obscureText: controller.obscureText.value,
+                        maxLines: 1,
+                        suffixIcon: GestureDetector(
+                            onTap: () {
+                              controller.obscureText.value =
+                                  !controller.obscureText.value;
+                            },
+                            child: controller.obscureText.value
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off)),
+                        validator: (value) {
+                          return Validator().notEmpty(value) ??
+                              Validator().confirmPassword(
+                                  value, controller.passwordCtrl.text);
+                        },
+                      ),
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    AppButton(
+                      onTap: () {
+                        controller.signUp();
+                      },
+                      title: KeyConst.signUp.tr,
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                    AppRichText(
+                      onTap: () {
+                        Get.back();
+                      },
+                      firstText: "${KeyConst.alreadyHaveAccount.tr}?",
+                      secondText: "${KeyConst.login.tr}!",
+                    ),
+                    SizedBox(
+                      height: 16.h,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

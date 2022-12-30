@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
@@ -10,7 +11,12 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     _timer = Timer(const Duration(seconds: 3), () {
-      Get.offNamed(Routes.LOGIN);
+      if(AppPreference().getUid() != '') {
+        Get.offNamed(Routes.HOME);
+      }
+      else {
+        Get.offNamed(Routes.LOGIN);
+      }
     });
     super.onInit();
   }

@@ -11,6 +11,7 @@ class AccountView extends GetView<AccountController> {
   const AccountView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Get.put(AccountController());
     return Scaffold(
       backgroundColor: HexColor('#F7F7F7'),
       body: Column(
@@ -73,7 +74,7 @@ class AccountView extends GetView<AccountController> {
           ),
           GestureDetector(
             onTap: () {
-              Logger.info("log out");
+              controller.logOut();
             },
             child: Container(
               // margin: EdgeInsets.symmetric(horizontal: 15.w),
