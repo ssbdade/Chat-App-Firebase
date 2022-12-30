@@ -125,6 +125,33 @@ class LoginView extends GetView<LoginController> {
                     firstText: "${KeyConst.dontHaveAccount.tr}?",
                     secondText: "${KeyConst.signUp.tr}!",
                   ),
+                  SizedBox(
+                    height: 12.h,
+                  ),
+                  GestureDetector(
+                    onTap: () async{
+                      await controller.signInWithGoogle(context: context);
+                    },
+                    child: Container(
+                      height:  50.h,
+                      decoration: BoxDecoration(
+                        borderRadius:  BorderRadius.circular(15),
+                        color:  Colors.black,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SvgPicture.asset(AppImage.icGoogle),
+                          const SizedBox(width: 10,),
+                          Text("Google",style: theme.textTheme.headline3!.copyWith(
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),),
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
