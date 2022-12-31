@@ -1,6 +1,12 @@
+
+import 'package:chat/app/models/models.dart';
 import 'package:flutter/material.dart';
 
+import '../controllers/message_controller.dart';
+
 class FavoriteContacts extends StatelessWidget {
+  FavoriteContacts({required this.userModel});
+  UserModel? userModel;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -19,7 +25,7 @@ class FavoriteContacts extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Column(
-                      children: const <Widget>[
+                      children:  <Widget>[
                         CircleAvatar(
                           radius: 35.0,
                           backgroundImage:
@@ -27,7 +33,7 @@ class FavoriteContacts extends StatelessWidget {
                         ),
                         SizedBox(height: 6.0),
                         Text(
-                          "Name",
+                          "controller.userModel.fullName",
                           style: TextStyle(
                             color: Colors.blueGrey,
                             fontSize: 16.0,

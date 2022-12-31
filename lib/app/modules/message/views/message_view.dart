@@ -1,3 +1,4 @@
+import 'package:chat/app/modules/home/controllers/home_controller.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
@@ -8,10 +9,13 @@ import '../widget/favorite_contacts.dart';
 import '../widget/recent_chats.dart';
 
 class MessageView extends GetView<MessageController> {
-  const MessageView({Key? key}) : super(key: key);
+   MessageView({Key? key, this.homeController}) : super(key: key);
+  HomeController? homeController;
 
   @override
   Widget build(BuildContext context) {
+
+    // print("============> ${controller.userModel.fullName}");
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text('MessageView'),
@@ -26,7 +30,7 @@ class MessageView extends GetView<MessageController> {
               ),
               child: Column(
                 children: <Widget>[
-                  FavoriteContacts(),
+                  FavoriteContacts(userModel: homeController!.userModel,),
                   RecentChats(),
                 ],
               ),
