@@ -24,6 +24,7 @@ class Auth extends GetxService {
       // UserModel userModel = UserModel.fromMap(result);
       // Logger.info(userModel.friends![0].fullName!);
       AppPreference().saveUid(user!.uid);
+
       return _userFromFirebaseUser(user);
     } on auth.FirebaseAuthException catch (e) {
       Logger.info(e.code);

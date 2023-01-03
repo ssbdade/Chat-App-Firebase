@@ -5,7 +5,7 @@ class UserModel{
   final String? fullName;
   final String? avatarUrl;
   final String? email;
-  final List<UserModel>? friends;
+  final List<dynamic>? friends;
 
   UserModel(
        {

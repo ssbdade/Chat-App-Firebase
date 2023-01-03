@@ -14,9 +14,8 @@ class AccountRepo extends GetxService {
   var id = '';
 
 
-  getAccountInfo() async {
-    firebaseUser!.getIdToken().then((value) => id = value);
-    print('adasdasdadasd ${id}');
+  getAccountInfo() {
+    List<UserModel> listUsers = [];
     FirebaseFirestore.instance
         .collection('users')
         .doc(firebaseUser!.uid)
@@ -24,10 +23,12 @@ class AccountRepo extends GetxService {
         .then((DocumentSnapshot documentSnapshot) {
       if (documentSnapshot.exists) {
         print('Document data: ${documentSnapshot.data()}');
+        listUsers.add(UserModel.fromMap(documentSnapshot.data()));
       } else {
         print('Document does not exist on the database');
       }
     });
+    return listUsers;
   }
 
 
