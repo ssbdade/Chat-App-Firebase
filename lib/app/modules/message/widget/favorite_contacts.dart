@@ -1,12 +1,12 @@
 
-import 'package:chat/app/models/models.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
 import '../controllers/message_controller.dart';
 
 class FavoriteContacts extends StatelessWidget {
-  FavoriteContacts({required this.userModel});
-  UserModel? userModel;
+  MessageController messageController = Get.find<MessageController>();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -33,7 +33,7 @@ class FavoriteContacts extends StatelessWidget {
                         ),
                         SizedBox(height: 6.0),
                         Text(
-                          "controller.userModel.fullName",
+                          messageController.userModel.fullName ?? "",
                           style: TextStyle(
                             color: Colors.blueGrey,
                             fontSize: 16.0,

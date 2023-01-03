@@ -9,10 +9,14 @@ class MessageController extends GetxController {
   late final  UserModel userModel;
 
   final count = 0.obs;
+
   @override
   void onInit() async{
-     await getUser();
     super.onInit();
+  }
+
+  void onLoad() async{
+  await getUser();
   }
 
   @override
