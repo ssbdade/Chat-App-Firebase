@@ -14,27 +14,11 @@ class MessageController extends GetxController {
 
   RxList<UserModel> listFriends = <UserModel>[].obs;
 
-  getAccountInfo() {
-    var firebaseUser = FirebaseAuth.instance;
-    var firebase = FirebaseFirestore.instance;
-    firebase
-        .collection('users')
-        .doc(firebaseUser.currentUser!.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        print('Document data: ${documentSnapshot.data()}');
-        listFriends.add(UserModel.fromMap(documentSnapshot.data()));
-      } else {
-        print('Document does not exist on the database');
-      }
-    });
-  }
 
   final count = 0.obs;
   @override
   void onInit() {
-    getAccountInfo();
+    AccountRepo().getAccountInfo(listFriends);
     super.onInit();
   }
 
