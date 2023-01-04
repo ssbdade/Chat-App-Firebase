@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/models.dart';
 import 'package:chat/app/util/common/logger.dart';
@@ -23,8 +21,6 @@ class Auth extends GetxService {
       auth.UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
       auth.User? user = result.user;
-      Logger.info(result.toString());
-      // Logger.info(userModel.friends![0].fullName!);
       AppPreference().saveUid(user!.uid);
       return _userFromFirebaseUser(user);
     } on auth.FirebaseAuthException catch (e) {
@@ -39,7 +35,7 @@ class Auth extends GetxService {
           email: email, password: password);
       auth.User? user = result.user;
       AppPreference().saveUid(user!.uid);
-      postNewUserToFireStore(fullName, result.user);
+      postNewUserToFireStore(fullName, profileName, result.user);
       return _userFromFirebaseUser(user);
     } on auth.FirebaseAuthException catch (e) {
       Logger.info(e.code);
@@ -58,17 +54,18 @@ class Auth extends GetxService {
     }
   }
 
-  postNewUserToFireStore(String fullName, auth.User? user) async {
+  postNewUserToFireStore(String fullName, String profileName, auth.User? user) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     Logger.info(user!.uid);
     UserModel userModel = UserModel(
       userId: user.uid,
       fullName: fullName,
       email: user.email,
+      profileName: profileName,
       avatarUrl: "asdasdasdasd",
     );
     try {
-      await firebaseFirestore.collection('users').doc(user.uid).set(userModel.toMap());
+      await firebaseFirestore.collection('users').add(userModel.toMap());
     }
     catch(e) {
       Logger.info(e.toString());
