@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-class Search {
-
+class Search extends GetxService {
+  static Search get to => Get.find();
   getUserList () {
     List<UserModel> listUsers = [];
 

@@ -63,6 +63,7 @@ class _MessageViewState extends State<MessageView> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(MessageController());
     return Scaffold(
       // appBar: AppBar(
       //   title: const Text('MessageView'),

@@ -1,26 +1,30 @@
-import 'package:chat/app/models/user_model.dart';
+import 'package:chat/app/data/response/friends.dart';
+import 'package:chat/app/data/response/search.dart';
+import 'package:chat/app/models/models.dart';
+import 'package:chat/app/modules/message/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:get/get.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
 
 class MessageController extends GetxController {
   //TODO: Implement MessageController
 
-  late final  UserModel userModel;
+
+
+
+  RxList<UserModel> listFriends = <UserModel>[].obs;
+
 
   final count = 0.obs;
-
   @override
-  void onInit() async{
+  void onInit() {
+    AccountRepo().getAccountInfo(listFriends);
     super.onInit();
-  }
-
-  void onLoad() async{
-  await getUser();
   }
 
   @override
   void onReady() {
+
     super.onReady();
   }
 
@@ -30,21 +34,4 @@ class MessageController extends GetxController {
   }
 
   void increment() => count.value++;
-
-
-
-  Future<void> getUser() async{
-    await FirebaseFirestore.instance
-        .collection('users')
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((DocumentSnapshot documentSnapshot) {
-      if (documentSnapshot.exists) {
-        userModel = UserModel.fromMap(documentSnapshot.data());
-      } else {
-        print('Document does not exist on the database');
-
-      }
-    });
-  }
 }

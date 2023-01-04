@@ -56,6 +56,7 @@ class LoginController extends GetxController {
         await auth.signInWithCredential(credential);
 
         user = userCredential.user;
+        print(user!.uid);
       } on FirebaseAuthException catch (e) {
         if (e.code == 'account-exists-with-different-credential') {
           print("loi roi $e");
