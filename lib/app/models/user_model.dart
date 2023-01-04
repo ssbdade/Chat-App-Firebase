@@ -5,13 +5,16 @@ class UserModel{
   final String? fullName;
   final String? avatarUrl;
   final String? email;
+  final List<dynamic>? friends;
 
-  UserModel({
+  UserModel(
+       {
     this.userId,
     this.profileName,
     this.fullName,
     this.avatarUrl,
     this.email,
+         this.friends,
   });
 
   factory UserModel.fromMap(map) {
@@ -20,7 +23,8 @@ class UserModel{
       profileName: map['profileName'],
       fullName: map["fullName"],
       avatarUrl: map["avatarUrl"],
-      email: map['email']
+      email: map['email'],
+      friends: map['friends'],
     );
   }
 
@@ -31,6 +35,7 @@ class UserModel{
       'fullName': fullName,
       'avatarUrl': avatarUrl,
       'email': email,
+      'friends': friends,
     };
   }
 }

@@ -14,6 +14,7 @@ import '../controllers/login_controller.dart';
 
 class LoginView extends GetView<LoginController> {
   const LoginView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
@@ -24,9 +25,10 @@ class LoginView extends GetView<LoginController> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Stack (
+              Stack(
                 children: [
-                  Image.asset(AppImage.loginBg,
+                  Image.asset(
+                    AppImage.loginBg,
                     height: 188.h,
                   ),
                   Positioned(
@@ -65,7 +67,8 @@ class LoginView extends GetView<LoginController> {
                       maxLines: 1,
                       hintText: KeyConst.email.tr,
                       validator: (value) {
-                        return Validator().notEmpty(value) ?? Validator().email(value);
+                        return Validator().notEmpty(value) ??
+                            Validator().email(value);
                       },
                     ),
                     SizedBox(
@@ -79,12 +82,12 @@ class LoginView extends GetView<LoginController> {
                         maxLines: 1,
                         suffixIcon: GestureDetector(
                             onTap: () {
-                              controller.obscureText.value = !controller.obscureText.value;
+                              controller.obscureText.value =
+                                  !controller.obscureText.value;
                             },
                             child: controller.obscureText.value
-                                ? const Icon(Icons.visibility) :
-                                const Icon(Icons.visibility_off)
-                        ),
+                                ? const Icon(Icons.visibility)
+                                : const Icon(Icons.visibility_off)),
                         validator: (value) {
                           return Validator().notEmpty(value);
                         },
@@ -96,9 +99,7 @@ class LoginView extends GetView<LoginController> {
                     Align(
                       alignment: Alignment.topRight,
                       child: GestureDetector(
-                        onTap: () {
-
-                        },
+                        onTap: () {},
                         child: Text(
                           "${KeyConst.forgotPassword.tr}?",
                           style: theme.textTheme.headline3!.copyWith(
@@ -125,6 +126,38 @@ class LoginView extends GetView<LoginController> {
                       },
                       firstText: "${KeyConst.dontHaveAccount.tr}?",
                       secondText: "${KeyConst.signUp.tr}!",
+                    ),
+                    SizedBox(
+                      height: 12.h,
+                    ),
+                    GestureDetector(
+                      onTap: () async {
+                        await controller.signInWithGoogle(context: context);
+                      },
+                      child: Container(
+                        height: 50.h,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(15),
+                          color: Colors.black,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SvgPicture.asset(AppImage.icGoogle),
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Google",
+                              style: theme.textTheme.headline3!.copyWith(
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ],
                 ),
