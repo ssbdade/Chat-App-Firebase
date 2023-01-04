@@ -52,15 +52,6 @@ class MessageView extends StatefulWidget {
 
 class _MessageViewState extends State<MessageView> {
 
-  final MessageController _messageController = Get.put(MessageController());
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    _messageController.onLoad();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     Get.put(MessageController());
