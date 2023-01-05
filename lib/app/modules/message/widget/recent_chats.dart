@@ -35,7 +35,7 @@ class RecentChats extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ChatScreen(),
+                        builder: (_) => ChatScreen(room: controller.listRooms[index],),
                       ),
                     );
                   },

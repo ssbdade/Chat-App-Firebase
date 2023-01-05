@@ -1,21 +1,48 @@
+import 'package:chat/app/data/app_preference.dart';
+import 'package:chat/app/data/response/messages.dart';
+import 'package:chat/app/models/message_model.dart';
+import 'package:chat/app/models/room_chat_model.dart';
+import 'package:chat/app/modules/message/controllers/message_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../util/theme/app_colors.dart';
 import '../models/message_model.dart';
-import '../models/user_model.dart';
 
 class ChatScreen extends StatefulWidget {
   // final User user;
   //
   // ChatScreen({required this.user});
 
+  final RoomModel? room;
+
+  const ChatScreen({super.key,required this.room});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  _buildMessage(Message message, bool isMe) {
+  MessageController controller = Get.find();
+
+  String userID = FirebaseAuth.instance.currentUser!.uid;
+
+  @override
+  initState() {
+    super.initState();
+    controller.getMess(widget.room!.roomId!);
+    print(widget.room!.isFriends);
+    print(widget.room!.isFriends![userID]);
+    if(!widget.room!.isFriends![userID]) {
+      print("ket ban di");
+    }
+  }
+
+
+  _buildMessage(MessageModel message, bool isMe) {
     final Container msg = Container(
       margin: isMe
           ? const EdgeInsets.only(
@@ -46,7 +73,7 @@ class _ChatScreenState extends State<ChatScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            message.time,
+            formatTimeStamp(message.time!),
             style: TextStyle(
               color:isMe ? Colors.white70 :Colors.black54,
               fontSize: 16.0,
@@ -55,7 +82,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           const SizedBox(height: 8.0),
           Text(
-            message.text,
+            message.text!,
             style: TextStyle(
               color: isMe ? Colors.white70 :Colors.black54,
               fontSize: 16.0,
@@ -84,6 +111,7 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           Expanded(
             child: TextFormField(
+              controller: controller.messController,
                 onChanged: (text) {
                 },
                 decoration: InputDecoration(
@@ -109,7 +137,9 @@ class _ChatScreenState extends State<ChatScreen> {
             icon:const Icon(Icons.send),
             iconSize: 25.0,
             color: Theme.of(context).primaryColor,
-            onPressed: () {},
+            onPressed: () {
+              controller.sendMessage(widget.room!.roomId!);
+            },
           ),
         ],
       ),
@@ -134,7 +164,7 @@ class _ChatScreenState extends State<ChatScreen> {
             Padding(
               padding: const EdgeInsets.only(bottom: 10),
               child: Text(
-                chats[0].sender.name,
+                widget.room!.userModel!.fullName!,
                 style:const TextStyle(
                     fontSize: 20.0,
                     fontWeight: FontWeight.bold,
@@ -168,15 +198,16 @@ class _ChatScreenState extends State<ChatScreen> {
           children: <Widget>[
             Expanded(
               child: Container( color: Colors.white,
-                child: ListView.builder(
-                  reverse: true,
-                  padding: const EdgeInsets.only(top: 15.0),
-                  itemCount: messages.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    final Message message = messages[index];
-                    final bool isMe = message.sender.id == currentUser.id;
-                    return _buildMessage(message, isMe);
-                  },
+                child: Obx(
+                  () => ListView.builder(
+                    padding: const EdgeInsets.only(top: 15.0),
+                    itemCount: controller.listMess.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final MessageModel message = controller.listMess[index];
+                      final bool isMe = message.senderId == AppPreference().getUid();
+                      return _buildMessage(message, isMe);
+                    },
+                  ),
                 ),
               ),
             ),
@@ -186,4 +217,10 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+  String formatTimeStamp(Timestamp timestamp) {
+    var date = timestamp.toDate();
+    return DateFormat('hh:mm a').format(date);
+  }
+
+
 }

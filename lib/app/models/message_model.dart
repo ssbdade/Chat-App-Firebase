@@ -1,14 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MessageModel {
-  String? receiverId;
+  String? roomId;
   String? senderId;
   String? text;
-  DateTime? time;
+  Timestamp? time;
   bool? unread;
 
 
   MessageModel(
       {
-        this.receiverId,
+        this.roomId,
         this.senderId,
         this.text,
         this.time,
@@ -18,7 +20,7 @@ class MessageModel {
   factory MessageModel.fromMap(map) {
     return MessageModel(
       senderId: map["senderId"],
-      receiverId: map["receiverId"],
+      roomId: map["roomId"],
       text: map["text"],
       time: map["time"],
       unread: map["unread"],
@@ -28,12 +30,11 @@ class MessageModel {
   Map<String, dynamic> toMap() {
     return {
       'senderId': senderId,
-      'receiverId': receiverId,
+      'roomId': roomId,
       'text': text,
       'time': time,
       'unread': unread,
     };
   }
-
 
 }
