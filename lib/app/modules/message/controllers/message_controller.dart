@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/data/response/friends.dart';
 import 'package:chat/app/data/response/messages.dart';
@@ -12,7 +14,10 @@ import 'package:get/get.dart';
 class MessageController extends GetxController {
   //TODO: Implement MessageController
 
+  CollectionReference<Map<String, dynamic>> messCollection = FirebaseFirestore.instance.collection("messages");
+
   TextEditingController messController = TextEditingController();
+  Stream<QuerySnapshot> messStream = FirebaseFirestore.instance.collection('messages').orderBy("time").snapshots();
 
 
 
@@ -28,7 +33,6 @@ class MessageController extends GetxController {
   void onInit() {
     AccountRepo().getAccountInfo(listFriends);
     RoomChatRepo().getRoomChat(listRooms);
-
     super.onInit();
   }
 
@@ -46,9 +50,6 @@ class MessageController extends GetxController {
   void getMess(String roomId) async {
     listMess.value = await MessagesRepo().getMessagesList(roomId);
     listMess.forEach((element) {print(element.time);});
-
-
-
   }
 
   void sendMessage(String roomId) {

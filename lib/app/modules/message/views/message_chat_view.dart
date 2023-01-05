@@ -192,28 +192,43 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-      body: GestureDetector(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Container( color: Colors.white,
-                child: Obx(
-                  () => ListView.builder(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    itemCount: controller.listMess.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final MessageModel message = controller.listMess[index];
-                      final bool isMe = message.senderId == AppPreference().getUid();
-                      return _buildMessage(message, isMe);
-                    },
+      body: StreamBuilder<QuerySnapshot>(
+        stream: controller.messStream,
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Something went wrong');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+          }
+          if (snapshot.connectionState == ConnectionState.done) {
+            print(2);
+          }
+          print(snapshot.data);
+          return GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Container( color: Colors.white,
+                    child: Obx(
+                      () => ListView.builder(
+                        padding: const EdgeInsets.only(top: 15.0),
+                        itemCount: controller.listMess.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final MessageModel message = controller.listMess[index];
+                          final bool isMe = message.senderId == AppPreference().getUid();
+                          return _buildMessage(message, isMe);
+                        },
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                _buildMessageComposer(),
+              ],
             ),
-            _buildMessageComposer(),
-          ],
-        ),
+          );
+        }
       ),
     );
   }
