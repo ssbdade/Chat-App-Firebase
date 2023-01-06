@@ -20,7 +20,7 @@ class ChatScreen extends StatefulWidget {
 
   final RoomModel? room;
 
-  const ChatScreen({super.key,required this.room});
+  const ChatScreen({super.key,this.room});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -34,11 +34,6 @@ class _ChatScreenState extends State<ChatScreen> {
   initState() {
     super.initState();
     controller.getMess(widget.room!.roomId!);
-    print(widget.room!.isFriends);
-    print(widget.room!.isFriends![userID]);
-    if(!widget.room!.isFriends![userID]) {
-      print("ket ban di");
-    }
   }
 
 
@@ -192,28 +187,42 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
+
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Column(
-          children: <Widget>[
+        child: Obx(()=> Column(
+          children: [
+            if(widget.room!.isFriends![userID])...[
+              Container(
+                width: double.infinity,
+                color: Colors.grey,
+                padding: const EdgeInsets.only(top: 10,bottom: 10),
+                child:Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("ADD FRIEND",style: TextStyle(color: white,fontWeight: FontWeight.w600),),
+                    Icon(Icons.add,color: white,),
+                  ],
+                ),
+              ),
+            ],
             Expanded(
               child: Container( color: Colors.white,
-                child: Obx(
-                  () => ListView.builder(
-                    padding: const EdgeInsets.only(top: 15.0),
-                    itemCount: controller.listMess.length,
-                    itemBuilder: (BuildContext context, int index) {
-                      final MessageModel message = controller.listMess[index];
-                      final bool isMe = message.senderId == AppPreference().getUid();
-                      return _buildMessage(message, isMe);
-                    },
-                  ),
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(top: 15.0),
+                  itemCount: controller.listMess.length,
+                  reverse: false   ,
+                  itemBuilder: (BuildContext context, int index) {
+                    final MessageModel message = controller.listMess[index];
+                    final bool isMe = message.senderId == userID;
+                    return _buildMessage(message, isMe);
+                  },
                 ),
               ),
             ),
             _buildMessageComposer(),
           ],
-        ),
+        ),),
       ),
     );
   }
