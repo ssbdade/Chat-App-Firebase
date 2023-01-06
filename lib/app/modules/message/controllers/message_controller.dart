@@ -21,6 +21,7 @@ class MessageController extends GetxController {
 
 
 
+
   RxList<UserModel> listFriends = <UserModel>[].obs;
 
   RxList<RoomModel> listRooms = <RoomModel>[].obs;
@@ -31,14 +32,25 @@ class MessageController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
+    messStream.listen((event)=> getMess2(event));
     AccountRepo().getAccountInfo(listFriends);
     RoomChatRepo().getRoomChat(listRooms);
     super.onInit();
   }
 
+  void getMess2( QuerySnapshot<Object?>? data) async {
+    List<MessageModel> listTemp = [];
+    for (var element in  data!.docs) {
+      if(element["roomId"] ==   'b4efyHg1A1pQmClm3acI') {
+        listTemp.add(MessageModel.fromMap(element));
+      }
+    }
+    print(listTemp[0].text);
+    listMess.value = listTemp;
+  }
+
   @override
   void onReady() {
-
     super.onReady();
   }
 
@@ -47,9 +59,17 @@ class MessageController extends GetxController {
     super.onClose();
   }
 
-  void getMess(String roomId) async {
-    listMess.value = await MessagesRepo().getMessagesList(roomId);
-    listMess.forEach((element) {print(element.time);});
+  void getMess(String roomId, AsyncSnapshot<QuerySnapshot> snapshot) async {
+    // listMess.value = await MessagesRepo().getMessagesList(roomId);
+    // listMess.forEach((element) {print(element.time);});
+    List<MessageModel> listTemp = [];
+    for (var element in snapshot.data!.docs) {
+      if(element["roomId"] == roomId) {
+        listTemp.add(MessageModel.fromMap(element));
+      }
+    }
+    print(listTemp[0].text);
+    listMess.value = listTemp;
   }
 
   void sendMessage(String roomId) {
@@ -65,8 +85,9 @@ class MessageController extends GetxController {
       MessagesRepo().sendMessage(messageModel);
       messController.clear();
     }
-
   }
+
+
 
   void increment() => count.value++;
 }
