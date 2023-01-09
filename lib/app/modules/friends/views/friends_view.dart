@@ -7,31 +7,34 @@ import 'package:get/get.dart';
 import '../controllers/friends_controller.dart';
 
 class FriendsView extends GetView<FriendsController> {
-  const FriendsView({Key? key}) : super(key: key);
 
-  _buildRequests(BuildContext context) {
+   FriendsView({Key? key}) : super(key: key);
+
+  final FriendsController friendsController = Get.put(FriendsController());
+
+  _buildRequests(BuildContext context, int index) {
+    var element = friendsController.listRequest[index];
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            height: 80.r,
-            width: 80.r,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: red,
-            ),
+          const CircleAvatar(
+            radius: 35.0,
+            backgroundImage: NetworkImage(
+                "https://images.omerlocdn.com/resize?url=https%3A%2F%2Fgcm.omerlocdn.com%2Fproduction%2Fglobal%2Ffiles%2Fimage%2F7f510676-e91d-4e6d-a5ec-08034c3f2381.jpg&width=1024&type=jpeg&stripmeta=true"),
           ),
           SizedBox(width: 10.w,),
           Expanded(
-            child: Text('Name',
+            child: Text(element["senderName"],
               style: Theme.of(context).textTheme.headline1,
             ),
           ),
           SizedBox(width: 10.w,),
           Container(
-            width: 80.r,
-            height: 40.r,
+            width: 60.r,
+            height: 30.r,
             decoration: BoxDecoration(
               color: blue,
               borderRadius: BorderRadius.circular(10),
@@ -56,8 +59,10 @@ class FriendsView extends GetView<FriendsController> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView.builder(
-          itemCount: 7,
-          itemBuilder: (_, index) => _buildRequests(context))
+          itemCount: friendsController.listRequest.length,
+          itemBuilder: (_, index) {
+            return  _buildRequests(context, index);
+          })
     );
   }
 }

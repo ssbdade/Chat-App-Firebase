@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/models.dart';
 import 'package:chat/app/util/common/logger.dart';
@@ -21,10 +23,9 @@ class Auth extends GetxService {
       auth.UserCredential result = await _auth.signInWithEmailAndPassword(
           email: email.trim(), password: password.trim());
       auth.User? user = result.user;
-      // UserModel userModel = UserModel.fromMap(result);
+      Logger.info(result.toString());
       // Logger.info(userModel.friends![0].fullName!);
       AppPreference().saveUid(user!.uid);
-
       return _userFromFirebaseUser(user);
     } on auth.FirebaseAuthException catch (e) {
       Logger.info(e.code);

@@ -32,7 +32,6 @@ class RoomModel {
       "uid2": uid2,
       "user1": userModel1.toMap(),
       "user2": userModel2.toMap(),
-
     };
   }
 }

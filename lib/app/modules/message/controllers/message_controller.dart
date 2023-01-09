@@ -26,8 +26,6 @@ class MessageController extends GetxController {
 
   RxList<UserModel> listFriends = <UserModel>[].obs;
 
-  RxList<RoomModel> listRooms = <RoomModel>[].obs;
-
   RxList<MessageModel> listMess = <MessageModel>[].obs;
 
 
@@ -37,7 +35,6 @@ class MessageController extends GetxController {
     messStream = FirebaseFirestore.instance.collection('messages').orderBy("time", descending: true).limit(limit).snapshots();
     messStream.listen((event)=> getMess2(event));
     AccountRepo().getAccountInfo(listFriends);
-    RoomChatRepo().getRoomChat(listRooms);
     scrollController.addListener(() {
       if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         getMoreData();

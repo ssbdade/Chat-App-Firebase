@@ -31,7 +31,7 @@ class HomeView extends GetView<HomeController> {
         body: PageView(
           controller: pageController,
           onPageChanged: onPageChanged,
-          children: const [
+          children: [
             MessageView(),
             FriendsView(),
             AccountView(),
