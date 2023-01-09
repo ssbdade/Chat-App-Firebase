@@ -33,13 +33,12 @@ class RecentChats extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => ChatScreen(room: controller.listRooms[index],),
-                    //   ),
-                    // );
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ChatScreen(room: controller.listRooms[index],),
+                      ),
+                    );
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 15.0, bottom: 5.0, right: 10.0),

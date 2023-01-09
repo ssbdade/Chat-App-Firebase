@@ -1,17 +1,16 @@
 import 'package:chat/app/data/app_preference.dart';
-import 'package:chat/app/data/response/messages.dart';
 import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/room_chat_model.dart';
 import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../util/theme/app_colors.dart';
-import '../models/message_model.dart';
 
 class ChatScreen extends StatefulWidget {
   // final User user;
@@ -194,6 +193,8 @@ class _ChatScreenState extends State<ChatScreen> {
               child: Container( color: Colors.white,
                 child: Obx(
                       () => ListView.builder(
+                        controller: controller.scrollController,
+                        reverse: true,
                     padding: const EdgeInsets.only(top: 15.0),
                     itemCount: controller.listMess.length,
                     itemBuilder: (BuildContext context, int index) {
