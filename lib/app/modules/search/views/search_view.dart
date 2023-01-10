@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
+import '../../message/views/message_chat_view.dart';
 import '../controllers/search_controller.dart';
 
 class SearchView extends GetView<SearchController> {
@@ -89,12 +90,42 @@ class FriendsSearch extends SearchDelegate<UserModel> {
                 subtitle: Text(
                     (listItems[index].email.toString())),
                 onTap: () {
-                  showResults(context);
+                  Get.to(ChatScreen());
+                  // showResults(context);
+                  // _dialogBuilder(context,listItems[index]);
+
                 },
               ),
               Divider(),
             ],
           );
         });
+  }
+  Future<void> _dialogBuilder(BuildContext context,UserModel userModel) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Container(
+            height: 100,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const Text('Avatar'),
+                Text(userModel.fullName ?? ""),
+                Text(userModel.email ?? ""),
+                Container(
+                  color: Colors.blue,
+                  child: Text(
+                    "Add Friend",
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 }
