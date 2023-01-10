@@ -1,17 +1,16 @@
 import 'package:chat/app/data/app_preference.dart';
-import 'package:chat/app/data/response/messages.dart';
 import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/room_chat_model.dart';
 import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../../util/theme/app_colors.dart';
-import '../models/message_model.dart';
 
 class ChatScreen extends StatefulWidget {
   // final User user;
@@ -20,7 +19,7 @@ class ChatScreen extends StatefulWidget {
 
   final RoomModel? room;
 
-  const ChatScreen({super.key,this.room});
+  const ChatScreen({super.key,required this.room});
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
@@ -33,7 +32,6 @@ class _ChatScreenState extends State<ChatScreen> {
   @override
   initState() {
     super.initState();
-    controller.getMess(widget.room!.roomId!);
   }
 
 
@@ -187,36 +185,24 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
         ],
       ),
-
       body: GestureDetector(
         onTap: () => FocusScope.of(context).unfocus(),
-        child: Obx(()=> Column(
-          children: [
-            if(widget.room!.isFriends![userID])...[
-              Container(
-                width: double.infinity,
-                color: Colors.grey,
-                padding: const EdgeInsets.only(top: 10,bottom: 10),
-                child:Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("ADD FRIEND",style: TextStyle(color: white,fontWeight: FontWeight.w600),),
-                    Icon(Icons.add,color: white,),
-                  ],
-                ),
-              ),
-            ],
+        child: Column(
+          children: <Widget>[
             Expanded(
               child: Container( color: Colors.white,
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(top: 15.0),
-                  itemCount: controller.listMess.length,
-                  reverse: false   ,
-                  itemBuilder: (BuildContext context, int index) {
-                    final MessageModel message = controller.listMess[index];
-                    final bool isMe = message.senderId == userID;
-                    return _buildMessage(message, isMe);
-                  },
+                child: Obx(
+                      () => ListView.builder(
+                        controller: controller.scrollController,
+                        reverse: true,
+                    padding: const EdgeInsets.only(top: 15.0),
+                    itemCount: controller.listMess.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      final MessageModel message = controller.listMess[index];
+                      final bool isMe = message.senderId == AppPreference().getUid();
+                      return _buildMessage(message, isMe);
+                    },
+                  ),
                 ),
               ),
             ),
@@ -263,8 +249,6 @@ class _ChatScreenState extends State<ChatScreen> {
       //     );
       //   }
       // ),
-        ),),
-      ),
     );
   }
   String formatTimeStamp(Timestamp timestamp) {

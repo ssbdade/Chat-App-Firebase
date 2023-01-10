@@ -39,7 +39,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.FRIENDS,
-      page: () => const FriendsView(),
+      page: () => FriendsView(),
       binding: FriendsBinding(),
     ),
     GetPage(

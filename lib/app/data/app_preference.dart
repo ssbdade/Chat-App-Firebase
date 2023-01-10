@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AppPreference {
   late SharedPreferences prefs;
   final uid = "uid";
+  final userModel = "userModel";
 
 
   init() async {
@@ -23,6 +24,13 @@ class AppPreference {
     await prefs.clear();
   }
 
+  void saveUserModel(String value) async {
+    await prefs.setString(userModel, value);
+  }
+  
+  String getUserModel() {
+    return prefs.getString(userModel) ?? "";
+  }
 
   // Singleton
   static final AppPreference _appPreference = AppPreference._internal();

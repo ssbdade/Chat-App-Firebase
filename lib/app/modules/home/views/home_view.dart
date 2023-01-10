@@ -15,8 +15,6 @@ class HomeView extends GetView<HomeController> {
 
   late PageController pageController;
 
-
-
   HomeView({super.key}){
     Logger.info("da toi main page");
     pageController = PageController(
@@ -33,10 +31,10 @@ class HomeView extends GetView<HomeController> {
         body: PageView(
           controller: pageController,
           onPageChanged: onPageChanged,
-          children:  [
+          children: [
             MessageView(),
-            const FriendsView(),
-            const AccountView(),
+            FriendsView(),
+            AccountView(),
             // SettingPage(),
           ],
         ),

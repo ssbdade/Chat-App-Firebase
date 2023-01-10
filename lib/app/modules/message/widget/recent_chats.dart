@@ -1,5 +1,6 @@
 
 
+import 'package:chat/app/modules/home/controllers/home_controller.dart';
 import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,9 @@ import 'package:google_fonts/google_fonts.dart';
 import '../views/message_chat_view.dart';
 
 class RecentChats extends StatelessWidget {
-  MessageController controller = Get.find();
+  final HomeController controller = Get.find();
+
+  RecentChats({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -33,13 +36,12 @@ class RecentChats extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    // Navigator.push(
-                    //   context,
-                    //   MaterialPageRoute(
-                    //     builder: (_) => ChatScreen(room: controller.listRooms[index],),
-                    //   ),
-                    // );
-
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ChatScreen(room: controller.listRooms[index],),
+                      ),
+                    );
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 15.0, bottom: 5.0, right: 10.0),
