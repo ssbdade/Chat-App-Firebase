@@ -39,7 +39,7 @@ class Auth extends GetxService {
           email: email, password: password);
       auth.User? user = result.user;
       AppPreference().saveUid(user!.uid);
-      postNewUserToFireStore(fullName, profileName, result.user);
+      postNewUserToFireStore(fullName, result.user);
       return _userFromFirebaseUser(user);
     } on auth.FirebaseAuthException catch (e) {
       Logger.info(e.code);
@@ -58,14 +58,13 @@ class Auth extends GetxService {
     }
   }
 
-  postNewUserToFireStore(String fullName, String profileName, auth.User? user) async {
+  postNewUserToFireStore(String fullName, auth.User? user) async {
     FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
     Logger.info(user!.uid);
     UserModel userModel = UserModel(
       userId: user.uid,
       fullName: fullName,
       email: user.email,
-      profileName: profileName,
       avatarUrl: "asdasdasdasd",
     );
     try {

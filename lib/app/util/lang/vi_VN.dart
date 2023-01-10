@@ -34,6 +34,9 @@ const Map<String, String> vi_VN = {
   'user-not-found': 'Không tìm thấy email',
   'too-many-requests': 'Quá nhiều yêu cầu, vui lòng đợi 30s',
   'email-already-in-use': 'Email đã được sử dụng',
+  KeyConst.updatePro5: 'Cập nhật thông tin',
+  KeyConst.update: 'Cập nhật',
+  KeyConst.success: 'Thành công',
 
 
 };

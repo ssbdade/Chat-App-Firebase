@@ -5,24 +5,21 @@ class RoomModel {
   String? uid2;
   UserModel? userModel;
   String? roomId;
-  Map<String, dynamic>? isFriends;
 
   RoomModel({
     this.uid1,
     this.uid2,
     this.userModel,
     this.roomId,
-    this.isFriends,
 });
 
 
-  factory RoomModel.fromMap(map, String user,String roomId) {
+  factory RoomModel.fromMap(map, UserModel user,String roomId) {
     return RoomModel(
       uid1: map["uid1"],
       uid2: map["uid2"],
-      userModel: UserModel.fromMap(map[user]),
+      userModel: user,
       roomId: roomId,
-      isFriends: map["isFriends"],
     );
   }
 

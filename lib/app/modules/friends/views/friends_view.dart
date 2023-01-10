@@ -13,7 +13,6 @@ class FriendsView extends GetView<FriendsController> {
   final FriendsController friendsController = Get.put(FriendsController());
 
   _buildRequests(BuildContext context, int index) {
-    var element = friendsController.listRequest[index];
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
@@ -27,7 +26,7 @@ class FriendsView extends GetView<FriendsController> {
           ),
           SizedBox(width: 10.w,),
           Expanded(
-            child: Text(element["senderName"],
+            child: Text(controller.listUser[index].fullName!,
               style: Theme.of(context).textTheme.headline1,
             ),
           ),

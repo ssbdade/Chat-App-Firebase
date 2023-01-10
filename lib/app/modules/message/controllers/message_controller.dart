@@ -3,10 +3,8 @@ import 'dart:async';
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/data/response/friends.dart';
 import 'package:chat/app/data/response/messages.dart';
-import 'package:chat/app/data/response/room_chat.dart';
 import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/models.dart';
-import 'package:chat/app/models/room_chat_model.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
@@ -41,13 +39,14 @@ class MessageController extends GetxController {
 
       }
     });
+    print(1);
     super.onInit();
   }
 
   void getMess2(QuerySnapshot<Object?>? data) async {
     List<MessageModel> listTemp = [];
     for (var element in  data!.docs) {
-      if(element["roomId"] ==   'b4efyHg1A1pQmClm3acI') {
+      if(element["roomId"] == 'b4efyHg1A1pQmClm3acI') {
         listTemp.add(MessageModel.fromMap(element));
       }
     }
@@ -64,18 +63,6 @@ class MessageController extends GetxController {
     super.onClose();
   }
 
-  // void getMess(String roomId, AsyncSnapshot<QuerySnapshot> snapshot) async {
-  //   // listMess.value = await MessagesRepo().getMessagesList(roomId);
-  //   // listMess.forEach((element) {print(element.time);});
-  //   List<MessageModel> listTemp = [];
-  //   for (var element in snapshot.data!.docs) {
-  //     if(element["roomId"] == roomId) {
-  //       listTemp.add(MessageModel.fromMap(element));
-  //     }
-  //   }
-  //   print(listTemp[0].text);
-  //   listMess.value = listTemp;
-  // }
 
   void sendMessage(String roomId) {
     if (messController.text != '') {

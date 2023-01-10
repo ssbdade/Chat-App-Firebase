@@ -107,7 +107,9 @@ class _ChatScreenState extends State<ChatScreen> {
               controller: controller.messController,
                 onChanged: (text) {
                 },
+                maxLines: 2,
                 decoration: InputDecoration(
+                  contentPadding: EdgeInsets.all(10.r),
                   border: const OutlineInputBorder(
                       borderSide: BorderSide(width: 1.0),
                       borderRadius: BorderRadius.all(
@@ -122,7 +124,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(35.r)),
                   ),
                   hintText: 'Send a message ...',
-                  alignLabelWithHint: false,
+                  // alignLabelWithHint: false,
                 )
             ),
           ),

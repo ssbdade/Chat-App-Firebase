@@ -24,7 +24,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     getUserInfo();
-    // print(listFriends);
+    listRooms = <RoomModel>[].obs;
     roomStream1 = FirebaseFirestore.instance.collection('roomChats').where("uid1", isEqualTo: firebaseUser!.uid).limit(limit).snapshots();
     roomStream1.listen((event)=> getRoom1(event));
     roomStream2 = FirebaseFirestore.instance.collection('roomChats').where("uid2", isEqualTo: firebaseUser!.uid).limit(limit).snapshots();
@@ -32,17 +32,24 @@ class HomeController extends GetxController {
   }
 
   void getRoom1(QuerySnapshot<Object?>? data) async {
-    List<RoomModel> listTemp = [];
     for (var element in  data!.docs) {
-      listRooms.add(RoomModel.fromMap(element, "user2", element.id));
+      DocumentReference<Map<String, dynamic>> documentReference = element["user2"];
+      documentReference.get().then((value) {
+        UserModel temp = UserModel.fromMap(value.data());
+        listRooms.add(RoomModel.fromMap(element, temp, element.id));
+      });
     }
   }
 
 
   void getRoom2(QuerySnapshot<Object?>? data) async {
-    List<RoomModel> listTemp = [];
     for (var element in  data!.docs) {
-      listRooms.add(RoomModel.fromMap(element, "user1", element.id));
+      DocumentReference<Map<String, dynamic>> documentReference = element["user1"];
+      documentReference.get().then((value) {
+        print('asdddddddddd ${value.data()}');
+        UserModel temp = UserModel.fromMap(value.data());
+        listRooms.add(RoomModel.fromMap(element, temp, element.id));
+      });
     }
   }
 
@@ -53,14 +60,14 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    print(2);
     super.onClose();
   }
 
   void getUserInfo() {
     FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).get().then((value) {
       UserModel userModel = UserModel.fromMap(value);
-      print(userModel.userId);
-      print(jsonEncode(userModel.toMap()));
+      AppPreference().saveUserModel(jsonEncode(userModel.toMap()));
     });
   }
 

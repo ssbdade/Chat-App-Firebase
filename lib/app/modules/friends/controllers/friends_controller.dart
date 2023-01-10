@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/models.dart';
+import 'package:chat/app/modules/message/models/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -17,6 +16,8 @@ class FriendsController extends GetxController {
   int limit = 10;
 
   RxList<QueryDocumentSnapshot<Object?>> listRequest = <QueryDocumentSnapshot<Object?>>[].obs;
+
+  RxList<UserModel> listUser = <UserModel>[].obs;
 
   final count = 0.obs;
   @override
@@ -43,8 +44,11 @@ class FriendsController extends GetxController {
   void getRequest(QuerySnapshot<Object?>? data) async {
     List<QueryDocumentSnapshot<Object?>> listTemp = [];
     for (var element in  data!.docs) {
+      DocumentReference<Map<String, dynamic>> documentReference = element["sender"];
+      documentReference.get().then((value) => listUser.add(UserModel.fromMap(value.data())));
       listTemp.add(element);
     }
     listRequest.value = listTemp;
   }
+
 }

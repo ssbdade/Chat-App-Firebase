@@ -9,6 +9,5 @@ class HomeBinding extends Bindings {
     Get.put(
       HomeController(),
     );
-
   }
 }

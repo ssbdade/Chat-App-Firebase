@@ -1,3 +1,4 @@
+import 'package:chat/app/modules/account/widget/item.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:chat/app/util/theme/app_colors.dart';
 import 'package:flutter/material.dart';
@@ -30,15 +31,17 @@ class AccountView extends GetView<AccountController> {
                   height: 70.r,
                   width: 70.r,
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Nhất Hoàng',
-                      style: Theme.of(context).textTheme.headline1,
-                    ),
-                    Text('abcxyz@gmail.com'),
-                  ],
+                Obx(
+                  () => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(controller.userModel.value.fullName!,
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                      Text(controller.userModel.value.email!),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -46,54 +49,20 @@ class AccountView extends GetView<AccountController> {
           SizedBox(
             height: 5,
           ),
-          GestureDetector(
+          Item(
+            title: 'Cập nhật thông tin',
             onTap: () {
-              Logger.info("update pro5");
+              controller.toUpdatePro5Page();
             },
-            child: Container(
-              // margin: EdgeInsets.symmetric(horizontal: 15.w),
-              height: 57.h,
-              color: white,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Cập nhật thông tin',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    Spacer(),
-                    Icon(Icons.chevron_right),
-                  ],
-                ),
-              ),
-            ),
           ),
           SizedBox(
             height: 5,
           ),
-          GestureDetector(
+          Item(
+            title: 'Đăng xuất',
             onTap: () {
               controller.logOut();
             },
-            child: Container(
-              // margin: EdgeInsets.symmetric(horizontal: 15.w),
-              height: 57.h,
-              color: white,
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('Đăng xuất',
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                    Spacer(),
-                    Icon(Icons.chevron_right),
-                  ],
-                ),
-              ),
-            ),
           ),
         ],
       ),

@@ -14,4 +14,7 @@ abstract class KeyConst {
   static const String alreadyHaveAccount = "Already_Have_Account?";
   static const String signUp = "Sign_Up";
   static const String email = 'Email';
+  static const String updatePro5 = 'Update_Profile';
+  static const String update = 'Update';
+  static const String success = 'Success';
 }
