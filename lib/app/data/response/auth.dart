@@ -61,8 +61,7 @@ class Auth extends GetxService {
       userId: user.uid,
       fullName: fullName,
       email: user.email,
-      profileName: profileName,
-      avatarUrl: "asdasdasdasd",
+      avatarUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTL_JlCFnIGX5omgjEjgV9F3sBRq14eTERK9w&usqp=CAU",
     );
     try {
       await firebaseFirestore.collection('users').add(userModel.toMap());

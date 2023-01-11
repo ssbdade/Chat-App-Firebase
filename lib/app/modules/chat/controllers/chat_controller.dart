@@ -1,26 +1,23 @@
-import 'dart:async';
-
 import 'package:chat/app/data/app_preference.dart';
-import 'package:chat/app/data/response/friends.dart';
 import 'package:chat/app/data/response/messages.dart';
 import 'package:chat/app/models/message_model.dart';
-import 'package:chat/app/models/models.dart';
+import 'package:chat/app/models/room_chat_model.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class MessageController extends GetxController {
-  //TODO: Implement MessageController
+class ChatController extends GetxController {
+  //TODO: Implement ChatController
 
   int limit = 10;
 
-  TextEditingController messController = TextEditingController();
-  late Stream<QuerySnapshot> messStream;
+  RoomModel room = Get.arguments;
+
+  TextEditingController chatController = TextEditingController();
+  late Stream<QuerySnapshot> chatStream;
 
   ScrollController scrollController = ScrollController();
-
-  RxList<UserModel> listFriends = <UserModel>[].obs;
 
   RxList<MessageModel> listMess = <MessageModel>[].obs;
 
@@ -28,13 +25,11 @@ class MessageController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
-    messStream = FirebaseFirestore.instance.collection('messages').orderBy("time", descending: true).limit(limit).snapshots();
-    messStream.listen((event)=> getMess2(event));
-    AccountRepo().getAccountInfo(listFriends);
+    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.roomId).orderBy('time', descending: true).limit(limit).snapshots();
+    chatStream.listen((event)=> getMess2(event));
     scrollController.addListener(() {
       if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
         getMoreData();
-
       }
     });
     print(1);
@@ -44,9 +39,7 @@ class MessageController extends GetxController {
   void getMess2(QuerySnapshot<Object?>? data) async {
     List<MessageModel> listTemp = [];
     for (var element in  data!.docs) {
-      if(element["roomId"] == 'b4efyHg1A1pQmClm3acI') {
         listTemp.add(MessageModel.fromMap(element));
-      }
     }
     listMess.value = listTemp;
   }
@@ -63,24 +56,24 @@ class MessageController extends GetxController {
 
 
   void sendMessage(String roomId) {
-    if (messController.text != '') {
+    if (chatController.text != '') {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
-        text: messController.text,
+        text: chatController.text,
         unread: false,
         senderId: AppPreference().getUid(),
         roomId: roomId,
       );
       listMess.add(messageModel);
       MessagesRepo().sendMessage(messageModel);
-      messController.clear();
+      chatController.clear();
     }
   }
 
   void getMoreData() {
     limit+=10;
-    messStream = FirebaseFirestore.instance.collection('messages').orderBy("time", descending: true).limit(limit).snapshots();
-    messStream.listen((event)=> getMess2(event));
+    chatStream = FirebaseFirestore.instance.collection('messages').orderBy("time", descending: true).limit(limit).snapshots();
+    chatStream.listen((event)=> getMess2(event));
     Logger.info("call lai");
   }
 
@@ -88,4 +81,3 @@ class MessageController extends GetxController {
 
   void increment() => count.value++;
 }
-

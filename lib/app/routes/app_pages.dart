@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import '../modules/chat/bindings/chat_binding.dart';
+import '../modules/chat/views/chat_view.dart';
 import '../modules/modules.dart';
 import '../modules/search/bindings/search_binding.dart';
 import '../modules/search/views/search_view.dart';
@@ -36,7 +38,7 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.MESSAGE,
-      page: () =>  MessageView(),
+      page: () => MessageView(),
       binding: MessageBinding(),
     ),
     GetPage(
@@ -58,6 +60,11 @@ class AppPages {
       name: _Paths.UPDATE_PROFILE,
       page: () => const UpdateProfileView(),
       binding: UpdateProfileBinding(),
+    ),
+    GetPage(
+      name: _Paths.CHAT,
+      page: () => const ChatView(),
+      binding: ChatBinding(),
     ),
   ];
 }

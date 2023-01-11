@@ -1,13 +1,10 @@
-
-
 import 'package:chat/app/modules/home/controllers/home_controller.dart';
-import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:chat/app/routes/app_pages.dart';
+import 'package:chat/app/util/common/logger.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../views/message_chat_view.dart';
 
 class RecentChats extends StatelessWidget {
   final HomeController controller = Get.find();
@@ -36,12 +33,8 @@ class RecentChats extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => ChatScreen(room: controller.listRooms[index],),
-                      ),
-                    );
+                    Logger.info('listrooom ${controller.listRooms[index].roomId}');
+                    Get.toNamed(Routes.CHAT, arguments: controller.listRooms[index]);
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 15.0, bottom: 5.0, right: 10.0),
@@ -60,10 +53,10 @@ class RecentChats extends StatelessWidget {
                       children: <Widget>[
                         Row(
                           children: <Widget>[
-                            const CircleAvatar(
+                            CircleAvatar(
                               radius: 35.0,
                               backgroundImage: NetworkImage(
-                                  "https://images.omerlocdn.com/resize?url=https%3A%2F%2Fgcm.omerlocdn.com%2Fproduction%2Fglobal%2Ffiles%2Fimage%2F7f510676-e91d-4e6d-a5ec-08034c3f2381.jpg&width=1024&type=jpeg&stripmeta=true"),
+                                  controller.listRooms[index].userModel!.avatarUrl!,)
                             ),
                             const SizedBox(width: 10.0),
                             Column(

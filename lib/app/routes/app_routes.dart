@@ -14,6 +14,7 @@ abstract class Routes {
   static const SAERCH = _Paths.SAERCH;
   static const SEARCH = _Paths.SEARCH;
   static const UPDATE_PROFILE = _Paths.UPDATE_PROFILE;
+  static const CHAT = _Paths.CHAT;
 }
 
 abstract class _Paths {
@@ -27,4 +28,5 @@ abstract class _Paths {
   static const SAERCH = '/saerch';
   static const SEARCH = '/search';
   static const UPDATE_PROFILE = '/update-profile';
+  static const CHAT = '/chat';
 }

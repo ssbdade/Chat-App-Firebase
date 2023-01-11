@@ -14,10 +14,11 @@ class HomeController extends GetxController {
 
   late Stream<QuerySnapshot> roomStream1;
   late Stream<QuerySnapshot> roomStream2;
+  late Stream<QuerySnapshot> roomStream;
 
   RxList<RoomModel> listRooms = <RoomModel>[].obs;
 
-  final User? firebaseUser = FirebaseAuth.instance.currentUser;
+  final String uid = FirebaseAuth.instance.currentUser!.uid;
 
   final count = 0.obs;
   @override
@@ -25,32 +26,30 @@ class HomeController extends GetxController {
     super.onInit();
     getUserInfo();
     listRooms = <RoomModel>[].obs;
-    roomStream1 = FirebaseFirestore.instance.collection('roomChats').where("uid1", isEqualTo: firebaseUser!.uid).limit(limit).snapshots();
-    roomStream1.listen((event)=> getRoom1(event));
-    roomStream2 = FirebaseFirestore.instance.collection('roomChats').where("uid2", isEqualTo: firebaseUser!.uid).limit(limit).snapshots();
-    roomStream2.listen((event)=> getRoom2(event));
+    roomStream = FirebaseFirestore.instance.collection('roomChats').where(uid, isGreaterThan: 0).limit(limit).snapshots();
+    roomStream.listen((event) {getRoom(event);});
   }
 
-  void getRoom1(QuerySnapshot<Object?>? data) async {
+  void getRoom(QuerySnapshot<Object?>? data) async {
+    List<RoomModel> listTemp = [];
     for (var element in  data!.docs) {
-      DocumentReference<Map<String, dynamic>> documentReference = element["user2"];
-      documentReference.get().then((value) {
-        UserModel temp = UserModel.fromMap(value.data());
-        listRooms.add(RoomModel.fromMap(element, temp, element.id));
-      });
-    }
-  }
 
-
-  void getRoom2(QuerySnapshot<Object?>? data) async {
-    for (var element in  data!.docs) {
-      DocumentReference<Map<String, dynamic>> documentReference = element["user1"];
-      documentReference.get().then((value) {
+      String user = "";
+      if(element[uid] == 1) {
+        user = "user2";
+      }
+      else {
+        user = "user1";
+      }
+      DocumentReference<Map<String, dynamic>> documentReference = element[user];
+      await documentReference.get().then((value) {
         print('asdddddddddd ${value.data()}');
         UserModel temp = UserModel.fromMap(value.data());
-        listRooms.add(RoomModel.fromMap(element, temp, element.id));
+        listTemp.add(RoomModel.fromMap(element, temp, element.id));
       });
     }
+    listRooms.value = listTemp;
+    print("asdasdasdas $listRooms");
   }
 
   @override
@@ -65,7 +64,7 @@ class HomeController extends GetxController {
   }
 
   void getUserInfo() {
-    FirebaseFirestore.instance.collection("users").doc(firebaseUser!.uid).get().then((value) {
+    FirebaseFirestore.instance.collection("users").doc(uid).get().then((value) {
       UserModel userModel = UserModel.fromMap(value);
       AppPreference().saveUserModel(jsonEncode(userModel.toMap()));
     });

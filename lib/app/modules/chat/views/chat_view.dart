@@ -1,26 +1,17 @@
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/message_model.dart';
-import 'package:chat/app/models/room_chat_model.dart';
-import 'package:chat/app/modules/message/controllers/message_controller.dart';
+import 'package:chat/app/util/theme/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
-import '../../../util/theme/app_colors.dart';
+import '../controllers/chat_controller.dart';
 
-class ChatScreen extends GetView<MessageController>{
-
-  final RoomModel? room;
-
-  ChatScreen({super.key, this.room});
-  
-  MessageController controller = Get.find();
-
-  String userID = FirebaseAuth.instance.currentUser!.uid;
+class ChatView extends GetView<ChatController> {
+  const ChatView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,16 +22,16 @@ class ChatScreen extends GetView<MessageController>{
           title: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const CircleAvatar(
+               CircleAvatar(
                 radius: 15.0,
                 backgroundImage: NetworkImage(
-                    "https://images.omerlocdn.com/resize?url=https%3A%2F%2Fgcm.omerlocdn.com%2Fproduction%2Fglobal%2Ffiles%2Fimage%2F7f510676-e91d-4e6d-a5ec-08034c3f2381.jpg&width=1024&type=jpeg&stripmeta=true"),
+                    controller.room.userModel!.avatarUrl!,)
               ),
               const SizedBox(width: 5.0),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
-                  room!.userModel!.fullName!,
+                  controller.room.userModel!.fullName!,
                   style:const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
@@ -93,45 +84,6 @@ class ChatScreen extends GetView<MessageController>{
             ],
           ),
         )
-
-      // StreamBuilder<QuerySnapshot>(
-      //   stream: controller.messStream,
-      //   builder: (context, snapshot) {
-      //     if (snapshot.hasError) {
-      //       return Text('Something went wrong');
-      //     }
-      //     if (snapshot.connectionState == ConnectionState.waiting) {
-      //       return Text("Loading");
-      //     }
-      //     if (snapshot.connectionState == ConnectionState.done) {
-      //       print(2);
-      //     }
-      //     controller.getMess(room!.roomId!, snapshot);
-      //     return GestureDetector(
-      //       onTap: () => FocusScope.of(context).unfocus(),
-      //       child: Column(
-      //         children: <Widget>[
-      //           Expanded(
-      //             child: Container( color: Colors.white,
-      //               child: Obx(
-      //                 () => ListView.builder(
-      //                   padding: const EdgeInsets.only(top: 15.0),
-      //                   itemCount: controller.listMess.length,
-      //                   itemBuilder: (BuildContext context, int index) {
-      //                     final MessageModel message = controller.listMess[index];
-      //                     final bool isMe = message.senderId == AppPreference().getUid();
-      //                     return _buildMessage(message, isMe);
-      //                   },
-      //                 ),
-      //               ),
-      //             ),
-      //           ),
-      //           _buildMessageComposer(),
-      //         ],
-      //       ),
-      //     );
-      //   }
-      // ),
     );
   }
 
@@ -204,7 +156,7 @@ class ChatScreen extends GetView<MessageController>{
           ),
           Expanded(
             child: TextFormField(
-                controller: controller.messController,
+                controller: controller.chatController,
                 onChanged: (text) {
                 },
                 maxLines: 2,
@@ -233,7 +185,7 @@ class ChatScreen extends GetView<MessageController>{
             iconSize: 25.0,
             color: Theme.of(context).primaryColor,
             onPressed: () {
-              controller.sendMessage(room!.roomId!);
+              controller.sendMessage(controller.room.roomId!);
             },
           ),
         ],

@@ -1,10 +1,10 @@
 import 'package:chat/app/models/models.dart';
 import 'package:chat/app/modules/common/widgets/form_input_field.dart';
+import 'package:chat/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 
-import '../../message/views/message_chat_view.dart';
 import '../controllers/search_controller.dart';
 
 class SearchView extends GetView<SearchController> {
@@ -90,7 +90,8 @@ class FriendsSearch extends SearchDelegate<UserModel> {
                 subtitle: Text(
                     (listItems[index].email.toString())),
                 onTap: () {
-                  Get.to(ChatScreen());
+
+                  Get.toNamed(Routes.CHAT);
                   // showResults(context);
                   // _dialogBuilder(context,listItems[index]);
 
