@@ -2,36 +2,18 @@ import 'package:chat/app/models/models.dart';
 import 'package:chat/app/modules/common/widgets/form_input_field.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:get/get.dart';
 
 import '../controllers/search_controller.dart';
 
-class SearchView extends GetView<SearchController> {
-  const SearchView({Key? key}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const FormInputField(
-          maxLines: 1,
-        ),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Text(
-          'SearchView is working',
-          style: TextStyle(fontSize: 20),
-        ),
-      ),
-    );
-  }
-}
-
-
 class FriendsSearch extends SearchDelegate<UserModel> {
+
   @override
   List<Widget> buildActions(BuildContext context) {
+    Get.put(SearchController());
+    SearchController controller = Get.find();
     return [
       IconButton(
         onPressed: () {
@@ -44,6 +26,8 @@ class FriendsSearch extends SearchDelegate<UserModel> {
 
   @override
   Widget buildLeading(BuildContext context) {
+    Get.put(SearchController());
+    SearchController controller = Get.find();
     return IconButton(
       onPressed: () {
         Get.back();
@@ -54,6 +38,8 @@ class FriendsSearch extends SearchDelegate<UserModel> {
 
   @override
   Widget buildResults(BuildContext context) {
+    Get.put(SearchController());
+    SearchController controller = Get.find();
     return Center(
       child: Text(query),
     );
@@ -63,8 +49,6 @@ class FriendsSearch extends SearchDelegate<UserModel> {
   Widget buildSuggestions(BuildContext context) {
     Get.put(SearchController());
     SearchController controller = Get.find();
-
-
     final listItems = query.isEmpty
         ? controller.listUsers
         : controller.listUsers
@@ -79,7 +63,7 @@ class FriendsSearch extends SearchDelegate<UserModel> {
     })
         .toList();
     return listItems.isEmpty
-        ? Center(child: Text("No Data Found!"))
+        ? const Center(child: Text("No Data Found!"))
         : ListView.builder(
         itemCount: listItems.length,
         itemBuilder: (context, index) {
@@ -90,11 +74,9 @@ class FriendsSearch extends SearchDelegate<UserModel> {
                 subtitle: Text(
                     (listItems[index].email.toString())),
                 onTap: () {
-
-                  Get.toNamed(Routes.CHAT);
+                  controller.getSearchResult(listItems[index]);
                   // showResults(context);
                   // _dialogBuilder(context,listItems[index]);
-
                 },
               ),
               Divider(),
@@ -108,7 +90,7 @@ class FriendsSearch extends SearchDelegate<UserModel> {
       builder: (BuildContext context) {
         return AlertDialog(
           content: Container(
-            height: 100,
+            height: 100.h,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,

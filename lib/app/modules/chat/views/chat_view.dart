@@ -138,7 +138,6 @@ class ChatView extends GetView<ChatController> {
       ),
     );
     return msg;
-
   }
 
   _buildMessageComposer(BuildContext context) {

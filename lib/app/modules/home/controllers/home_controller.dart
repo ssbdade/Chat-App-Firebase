@@ -20,6 +20,8 @@ class HomeController extends GetxController {
 
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
+
+
   final count = 0.obs;
   @override
   void onInit() {

@@ -51,11 +51,11 @@ class AppPages {
       page: () => const AccountView(),
       binding: AccountBinding(),
     ),
-    GetPage(
-      name: _Paths.SEARCH,
-      page: () => const SearchView(),
-      binding: SearchBinding(),
-    ),
+    // GetPage(
+    //   name: _Paths.SEARCH,
+    //   page: () => const SearchView(),
+    //   binding: SearchBinding(),
+    // ),
     GetPage(
       name: _Paths.UPDATE_PROFILE,
       page: () => const UpdateProfileView(),
