@@ -55,7 +55,7 @@ class ChatController extends GetxController {
   }
 
 
-  void sendMessage(String roomId) {
+  void sendMessage(String roomId) async {
     if (chatController.text != '') {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
@@ -65,8 +65,14 @@ class ChatController extends GetxController {
         roomId: roomId,
       );
       listMess.add(messageModel);
-      MessagesRepo().sendMessage(messageModel);
       chatController.clear();
+      String messId = await MessagesRepo().sendMessage(messageModel);
+      await FirebaseFirestore.instance.doc("roomChats/$roomId").update(
+        {
+          "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
+        }
+      );
+
     }
   }
 

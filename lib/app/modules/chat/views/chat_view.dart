@@ -105,7 +105,7 @@ class ChatView extends GetView<ChatController> {
       decoration: BoxDecoration(
         color: isMe ? Colors.blueAccent : Colors.grey.shade200,
         borderRadius: isMe
-            ?const BorderRadius.only(
+            ? const BorderRadius.only(
           topLeft: Radius.circular(15.0),
           bottomLeft: Radius.circular(15.0),
         )
@@ -151,16 +151,20 @@ class ChatView extends GetView<ChatController> {
             icon:const Icon(Icons.photo),
             iconSize: 25.0,
             color: Theme.of(context).primaryColor,
-            onPressed: () {},
+            onPressed: () {
+
+            },
           ),
           Expanded(
             child: TextFormField(
                 controller: controller.chatController,
                 onChanged: (text) {
                 },
+                minLines: 1,
                 maxLines: 2,
                 decoration: InputDecoration(
-                  contentPadding: EdgeInsets.all(10.r),
+                  contentPadding: EdgeInsets.only(left: 20.w, top: 10.h, bottom: 10.h),
+                  isDense: true,
                   border: const OutlineInputBorder(
                       borderSide: BorderSide(width: 1.0),
                       borderRadius: BorderRadius.all(

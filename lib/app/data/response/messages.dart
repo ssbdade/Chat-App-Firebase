@@ -26,14 +26,14 @@ class MessagesRepo extends GetxService {
     return listTemp;
   }
 
-  sendMessage(MessageModel messageModel) async {
-    try {
-      await FirebaseFirestore.instance.collection('messages')
-          .add(messageModel.toMap());
-    }
-    catch (e) {
-      Logger.info(e.toString());
-    }
+  Future<String> sendMessage(MessageModel messageModel) async {
+    String temp = '';
+    await FirebaseFirestore.instance.collection('messages')
+        .add(messageModel.toMap()).then((value) {
+            temp = value.id;
+            print(temp);
+          });
+    return temp;
   }
 
 
