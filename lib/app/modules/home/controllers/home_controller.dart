@@ -47,7 +47,9 @@ class HomeController extends GetxController {
       await documentReference.get().then((value) {
         print('asdddddddddd ${value.data()}');
         UserModel temp = UserModel.fromMap(value.data());
-        listTemp.add(RoomModel.fromMap(element, temp, element.id));
+        if(element["lastedMessage"] != null) {
+          listTemp.add(RoomModel.fromMap(element, temp, element.id));
+        }
       });
     }
     listRooms.value = listTemp;

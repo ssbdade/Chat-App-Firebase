@@ -78,7 +78,7 @@ class ChatController extends GetxController {
 
   void getMoreData() {
     limit+=10;
-    chatStream = FirebaseFirestore.instance.collection('messages').orderBy("time", descending: true).limit(limit).snapshots();
+    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.roomId).orderBy("time", descending: true).limit(limit).snapshots();
     chatStream.listen((event)=> getMess2(event));
     Logger.info("call lai");
   }
