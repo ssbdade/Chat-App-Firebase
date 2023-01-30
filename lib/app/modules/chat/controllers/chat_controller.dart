@@ -25,6 +25,7 @@ class ChatController extends GetxController {
   final count = 0.obs;
   @override
   void onInit() {
+
     chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.roomId).orderBy('time', descending: true).limit(limit).snapshots();
     chatStream.listen((event)=> getMess2(event));
     scrollController.addListener(() {
@@ -42,6 +43,7 @@ class ChatController extends GetxController {
         listTemp.add(MessageModel.fromMap(element));
     }
     listMess.value = listTemp;
+
   }
 
   @override
@@ -60,11 +62,12 @@ class ChatController extends GetxController {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
         text: chatController.text,
-        unread: false,
+        unread: true,
         senderId: AppPreference().getUid(),
         roomId: roomId,
       );
       listMess.add(messageModel);
+      room.lastedMessage = messageModel;
       chatController.clear();
       String messId = await MessagesRepo().sendMessage(messageModel);
       await FirebaseFirestore.instance.doc("roomChats/$roomId").update(
@@ -82,7 +85,6 @@ class ChatController extends GetxController {
     chatStream.listen((event)=> getMess2(event));
     Logger.info("call lai");
   }
-
 
 
   void increment() => count.value++;

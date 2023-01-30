@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:chat/app/data/app_preference.dart';
+import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/models.dart';
 import 'package:chat/app/models/room_chat_model.dart';
+import 'package:chat/app/routes/app_pages.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
@@ -12,8 +14,6 @@ class HomeController extends GetxController {
 
   int limit = 5;
 
-  late Stream<QuerySnapshot> roomStream1;
-  late Stream<QuerySnapshot> roomStream2;
   late Stream<QuerySnapshot> roomStream;
 
   RxList<RoomModel> listRooms = <RoomModel>[].obs;
@@ -35,7 +35,6 @@ class HomeController extends GetxController {
   void getRoom(QuerySnapshot<Object?>? data) async {
     List<RoomModel> listTemp = [];
     for (var element in  data!.docs) {
-
       String user = "";
       if(element[uid] == 1) {
         user = "user2";
@@ -44,15 +43,20 @@ class HomeController extends GetxController {
         user = "user1";
       }
       DocumentReference<Map<String, dynamic>> documentReference = element[user];
-      await documentReference.get().then((value) {
+      await documentReference.get().then((value) async {
         print('asdddddddddd ${value.data()}');
         UserModel temp = UserModel.fromMap(value.data());
         if(element["lastedMessage"] != null) {
-          listTemp.add(RoomModel.fromMap(element, temp, element.id));
+          DocumentReference<Map<String, dynamic>> message = element["lastedMessage"];
+          await message.get().then((lastMess) {listTemp.add(RoomModel.fromMap(element, temp, element.id, MessageModel.fromMap(lastMess)));});
+          // print(element['lastedMessage']);
+          // listTemp.add(RoomModel.fromMap(element, temp, element.id, null));
         }
       });
     }
+    print(listTemp.length);
     listRooms.value = listTemp;
+    sort();
     print("asdasdasdas $listRooms");
   }
 
@@ -77,4 +81,12 @@ class HomeController extends GetxController {
   void increment() => count.value++;
 
   RxInt bottomIndex = 0.obs;
+
+  void sort() {
+    listRooms.sort((a, b) => b.lastedMessage!.time!.compareTo(a.lastedMessage!.time!));
+  }
+
+  void toChatView(int index) {
+    Get.toNamed(Routes.CHAT, arguments: listRooms[index]);
+  }
 }

@@ -63,20 +63,20 @@ class SearchController extends GetxController {
                 ).then((doc) {
                   doc.get().then((room) {
                     Logger.info(userModel.userId!);
-                    roomModel = RoomModel.fromMap(room, userModel, room.id);
+                    roomModel = RoomModel.fromMap(room, userModel, room.id, null);
                     Get.toNamed(Routes.CHAT, arguments: roomModel);
                   });
                 });
               }
               else {
                 Logger.info(userModel.userId!);
-                roomModel = RoomModel.fromMap(value.docs[0], userModel, value.docs[0].id);
+                roomModel = RoomModel.fromMap(value.docs[0], userModel, value.docs[0].id, null);
                 Get.toNamed(Routes.CHAT, arguments: roomModel);
               }
             });
         }
       else {
-        roomModel = RoomModel.fromMap(value.docs[0], userModel, value.docs[0].id);
+        roomModel = RoomModel.fromMap(value.docs[0], userModel, value.docs[0].id, null);
         Get.toNamed(Routes.CHAT, arguments: roomModel);
       }
     });

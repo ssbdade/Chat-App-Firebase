@@ -1,4 +1,5 @@
 import 'package:chat/app/data/app_preference.dart';
+import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/user_model.dart';
 
 class RoomModel {
@@ -7,6 +8,7 @@ class RoomModel {
   UserModel? userModel;
   String? roomId;
   List<String>? participant;
+  MessageModel? lastedMessage;
 
   RoomModel({
     this.uid1,
@@ -14,16 +16,18 @@ class RoomModel {
     this.userModel,
     this.roomId,
     this.participant,
+    this.lastedMessage,
 });
 
 
-  factory RoomModel.fromMap(map, UserModel user,String roomId) {
+  factory RoomModel.fromMap(map, UserModel user,String roomId, MessageModel? messageModel) {
     return RoomModel(
       uid1: map["uid1"],
       uid2: map["uid2"],
       userModel: user,
       roomId: roomId,
       participant: [map["uid1"], map["uid2"]],
+      lastedMessage: messageModel,
     );
   }
 

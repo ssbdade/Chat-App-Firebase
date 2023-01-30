@@ -1,9 +1,11 @@
 import 'package:chat/app/modules/home/controllers/home_controller.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:chat/app/util/common/logger.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 
 class RecentChats extends StatelessWidget {
@@ -34,7 +36,7 @@ class RecentChats extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     Logger.info('listrooom ${controller.listRooms[index].roomId}');
-                    Get.toNamed(Routes.CHAT, arguments: controller.listRooms[index]);
+                    controller.toChatView(index);
                   },
                   child: Container(
                     margin: const EdgeInsets.only(top: 15.0, bottom: 5.0, right: 10.0),
@@ -76,7 +78,7 @@ class RecentChats extends StatelessWidget {
                                 SizedBox(
                                   width: MediaQuery.of(context).size.width * 0.45,
                                   child: Text(
-                                    "Message",
+                                    controller.listRooms[index].lastedMessage!.text!,
                                     style: GoogleFonts.sarabun(
                                       textStyle: const TextStyle(
                                         color: Color(0xFF454545),
@@ -93,27 +95,29 @@ class RecentChats extends StatelessWidget {
                         ),
                         Column(
                           children: <Widget>[
-                            Container(
-                              width: 40.0,
-                              height: 20.0,
-                              decoration: BoxDecoration(
-                                color: Theme.of(context).primaryColor,
-                                borderRadius: BorderRadius.circular(30.0),
-                              ),
-                              alignment: Alignment.center,
-                              child: const Text(
-                                'NEW',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 12.0,
-                                  fontWeight: FontWeight.bold,
+                            if(controller.listRooms[index].lastedMessage!.unread! &&
+                                controller.listRooms[index].lastedMessage!.senderId! != controller.uid)
+                              Container(
+                                width: 40.0,
+                                height: 20.0,
+                                decoration: BoxDecoration(
+                                  color: Theme.of(context).primaryColor,
+                                  borderRadius: BorderRadius.circular(30.0),
+                                ),
+                                alignment: Alignment.center,
+                                child: const Text(
+                                  'NEW',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
-                            ),
                             const SizedBox(height: 5.0),
-                            const Text(
-                              "10:20",
-                              style: TextStyle(
+                            Text(
+                              formatTimeStamp(controller.listRooms[index].lastedMessage!.time!),
+                              style: const TextStyle(
                                 color: Colors.grey,
                                 fontSize: 15.0,
                                 fontWeight: FontWeight.bold,
@@ -131,5 +135,11 @@ class RecentChats extends StatelessWidget {
         ),
       ),
     );
+  }
+
+
+  String formatTimeStamp(Timestamp timestamp) {
+    var date = timestamp.toDate();
+    return DateFormat('hh:mm a').format(date);
   }
 }
