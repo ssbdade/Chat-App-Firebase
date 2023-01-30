@@ -67,7 +67,7 @@ class MessageController extends GetxController {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
         text: messController.text,
-        unread: false,
+        unread: RxBool(false),
         senderId: AppPreference().getUid(),
         roomId: roomId,
       );

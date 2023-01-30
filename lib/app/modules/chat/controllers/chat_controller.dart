@@ -12,7 +12,7 @@ class ChatController extends GetxController {
 
   int limit = 10;
 
-  RoomModel room = Get.arguments;
+  Rx<RoomModel> room = Get.arguments;
 
   TextEditingController chatController = TextEditingController();
   late Stream<QuerySnapshot> chatStream;
@@ -26,7 +26,7 @@ class ChatController extends GetxController {
   @override
   void onInit() {
 
-    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.roomId).orderBy('time', descending: true).limit(limit).snapshots();
+    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.value.roomId).orderBy('time', descending: true).limit(limit).snapshots();
     chatStream.listen((event)=> getMess2(event));
     scrollController.addListener(() {
       if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
@@ -62,12 +62,12 @@ class ChatController extends GetxController {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
         text: chatController.text,
-        unread: true,
+        unread: RxBool(true),
         senderId: AppPreference().getUid(),
         roomId: roomId,
       );
       listMess.add(messageModel);
-      room.lastedMessage = messageModel;
+      room.value.lastedMessage!.value = messageModel;
       chatController.clear();
       String messId = await MessagesRepo().sendMessage(messageModel);
       await FirebaseFirestore.instance.doc("roomChats/$roomId").update(
@@ -81,7 +81,7 @@ class ChatController extends GetxController {
 
   void getMoreData() {
     limit+=10;
-    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.roomId).orderBy("time", descending: true).limit(limit).snapshots();
+    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.value.roomId).orderBy("time", descending: true).limit(limit).snapshots();
     chatStream.listen((event)=> getMess2(event));
     Logger.info("call lai");
   }

@@ -7,7 +7,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
-
 class RecentChats extends StatelessWidget {
   final HomeController controller = Get.find();
 
@@ -18,7 +17,7 @@ class RecentChats extends StatelessWidget {
     return Expanded(
       child: Container(
         decoration: BoxDecoration(
-          color:Theme.of(context).canvasColor,
+          color: Theme.of(context).canvasColor,
           borderRadius: const BorderRadius.only(
             topLeft: Radius.circular(30.0),
             topRight: Radius.circular(30.0),
@@ -35,16 +34,22 @@ class RecentChats extends StatelessWidget {
               itemBuilder: (BuildContext context, int index) {
                 return GestureDetector(
                   onTap: () {
-                    Logger.info('listrooom ${controller.listRooms[index].roomId}');
+                    Logger.info(
+                        'listrooom ${controller.listRooms[index].value.roomId}');
                     controller.toChatView(index);
+                    print(controller
+                        .listRooms[index].value.lastedMessage!.value.unread);
+                    Get.toNamed(Routes.CHAT,
+                        arguments: controller.listRooms[index]);
                   },
                   child: Container(
-                    margin: const EdgeInsets.only(top: 15.0, bottom: 5.0, right: 10.0),
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+                    margin: const EdgeInsets.only(
+                        top: 15.0, bottom: 5.0, right: 10.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 10.0),
                     decoration: const BoxDecoration(
                       color: Color(0xFFFFEFEE),
-                       // color: Colors.white,
+                      // color: Colors.white,
                       borderRadius: BorderRadius.only(
                         topRight: Radius.circular(20.0),
                         bottomRight: Radius.circular(20.0),
@@ -56,16 +61,18 @@ class RecentChats extends StatelessWidget {
                         Row(
                           children: <Widget>[
                             CircleAvatar(
-                              radius: 35.0,
-                              backgroundImage: NetworkImage(
-                                  controller.listRooms[index].userModel!.avatarUrl!,)
-                            ),
+                                radius: 35.0,
+                                backgroundImage: NetworkImage(
+                                  controller.listRooms[index].value.userModel!
+                                      .avatarUrl!,
+                                )),
                             const SizedBox(width: 10.0),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  controller.listRooms[index].userModel!.fullName!,
+                                  controller.listRooms[index].value.userModel!
+                                      .fullName!,
                                   style: GoogleFonts.sarabun(
                                     textStyle: const TextStyle(
                                       color: Color(0xFF000000),
@@ -76,9 +83,11 @@ class RecentChats extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 5.0),
                                 SizedBox(
-                                  width: MediaQuery.of(context).size.width * 0.45,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
                                   child: Text(
-                                    controller.listRooms[index].lastedMessage!.text!,
+                                    controller.listRooms[index].value
+                                        .lastedMessage!.value.text!,
                                     style: GoogleFonts.sarabun(
                                       textStyle: const TextStyle(
                                         color: Color(0xFF454545),
@@ -93,37 +102,43 @@ class RecentChats extends StatelessWidget {
                             ),
                           ],
                         ),
-                        Column(
-                          children: <Widget>[
-                            if(controller.listRooms[index].lastedMessage!.unread! &&
-                                controller.listRooms[index].lastedMessage!.senderId! != controller.uid)
-                              Container(
-                                width: 40.0,
-                                height: 20.0,
-                                decoration: BoxDecoration(
-                                  color: Theme.of(context).primaryColor,
-                                  borderRadius: BorderRadius.circular(30.0),
-                                ),
-                                alignment: Alignment.center,
-                                child: const Text(
-                                  'NEW',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12.0,
-                                    fontWeight: FontWeight.bold,
+                        Obx(
+                          () => Column(
+                            children: <Widget>[
+                              if (controller.listRooms[index].value
+                                      .lastedMessage!.value.unread!.value &&
+                                  controller.listRooms[index].value
+                                          .lastedMessage!.value.senderId! !=
+                                      controller.uid)
+                                Container(
+                                  width: 40.0,
+                                  height: 20.0,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).primaryColor,
+                                    borderRadius: BorderRadius.circular(30.0),
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: const Text(
+                                    'NEW',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
+                              const SizedBox(height: 5.0),
+                              Text(
+                                formatTimeStamp(controller.listRooms[index]
+                                    .value.lastedMessage!.value.time!),
+                                style: const TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
-                            const SizedBox(height: 5.0),
-                            Text(
-                              formatTimeStamp(controller.listRooms[index].lastedMessage!.time!),
-                              style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 15.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -136,7 +151,6 @@ class RecentChats extends StatelessWidget {
       ),
     );
   }
-
 
   String formatTimeStamp(Timestamp timestamp) {
     var date = timestamp.toDate();
