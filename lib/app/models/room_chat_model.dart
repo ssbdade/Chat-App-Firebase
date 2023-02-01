@@ -9,6 +9,7 @@ class RoomModel {
   String? roomId;
   List<String>? participant;
   Rx<MessageModel>? lastedMessage;
+  RxBool? isFriends;
 
   RoomModel({
     this.uid1,
@@ -17,6 +18,7 @@ class RoomModel {
     this.roomId,
     this.participant,
     this.lastedMessage,
+    this.isFriends,
 });
 
 
@@ -28,6 +30,7 @@ class RoomModel {
       roomId: roomId,
       participant: [map["uid1"], map["uid2"]],
       lastedMessage: Rx<MessageModel>(messageModel!),
+      isFriends: RxBool(map['isFriends']),
     );
   }
 
