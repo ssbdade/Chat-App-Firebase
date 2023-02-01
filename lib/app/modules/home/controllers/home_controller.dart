@@ -16,7 +16,7 @@ class HomeController extends GetxController {
 
   late Stream<QuerySnapshot> roomStream;
 
-  RxList<Rx<RoomModel>> listRooms = <Rx<RoomModel>>[].obs;
+  RxList<RoomModel> listRooms = <RoomModel>[].obs;
 
   final String uid = FirebaseAuth.instance.currentUser!.uid;
 
@@ -27,13 +27,13 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     getUserInfo();
-    listRooms = <Rx<RoomModel>>[].obs;
+    listRooms = <RoomModel>[].obs;
     roomStream = FirebaseFirestore.instance.collection('roomChats').where(uid, isGreaterThan: 0).limit(limit).snapshots();
     roomStream.listen((event) {getRoom(event);});
   }
 
   void getRoom(QuerySnapshot<Object?>? data) async {
-    List<Rx<RoomModel>> listTemp = [];
+    List<RoomModel> listTemp = [];
     for (var element in  data!.docs) {
       String user = "";
       if(element[uid] == 1) {
@@ -47,8 +47,8 @@ class HomeController extends GetxController {
         UserModel temp = UserModel.fromMap(value.data());
         if(element["lastedMessage"] != null) {
           DocumentReference<Map<String, dynamic>> message = element["lastedMessage"];
-          await message.get().then((lastMess) {listTemp.add(RoomModel.fromMap(element, temp, element.id, MessageModel.fromMap(lastMess)).obs);});
-          // print(element['lastedMessage']);
+          await message.get().then((lastMess) {listTemp.add(RoomModel.fromMap(element, temp, element.id, MessageModel.fromMap(lastMess)));});
+          print(element['participant']);
           // listTemp.add(RoomModel.fromMap(element, temp, element.id, null));
         }
       });
@@ -82,16 +82,16 @@ class HomeController extends GetxController {
   RxInt bottomIndex = 0.obs;
 
   void sort() {
-    listRooms.sort((a, b) => b.value.lastedMessage!.value.time!.compareTo(a.value.lastedMessage!.value.time!));
+    listRooms.sort((a, b) => b.lastedMessage!.value.time!.compareTo(a.lastedMessage!.value.time!));
   }
 
   void toChatView(int index) {
-    listRooms[index].value.lastedMessage!.value.unread!.value = false;
+    listRooms[index].lastedMessage!.value.unread!.value = false;
     update();
 
 
-    if(listRooms[index].value.lastedMessage!.value.senderId != uid) {
-      FirebaseFirestore.instance.collection('roomChats').doc(listRooms[index].value.roomId).get().then((value) {
+    if(listRooms[index].lastedMessage!.value.senderId != uid) {
+      FirebaseFirestore.instance.collection('roomChats').doc(listRooms[index].roomId).get().then((value) {
         DocumentReference<Map<String, dynamic>> lastMessage = value["lastedMessage"];
         lastMessage.update({
           'unread': false,

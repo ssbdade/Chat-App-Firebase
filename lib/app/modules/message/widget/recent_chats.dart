@@ -35,10 +35,10 @@ class RecentChats extends StatelessWidget {
                 return GestureDetector(
                   onTap: () {
                     Logger.info(
-                        'listrooom ${controller.listRooms[index].value.roomId}');
+                        'listrooom ${controller.listRooms[index].roomId}');
                     controller.toChatView(index);
                     print(controller
-                        .listRooms[index].value.lastedMessage!.value.unread);
+                        .listRooms[index].lastedMessage!.value.unread);
                     Get.toNamed(Routes.CHAT,
                         arguments: controller.listRooms[index]);
                   },
@@ -63,7 +63,7 @@ class RecentChats extends StatelessWidget {
                             CircleAvatar(
                                 radius: 35.0,
                                 backgroundImage: NetworkImage(
-                                  controller.listRooms[index].value.userModel!
+                                  controller.listRooms[index].userModel!
                                       .avatarUrl!,
                                 )),
                             const SizedBox(width: 10.0),
@@ -71,7 +71,7 @@ class RecentChats extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 Text(
-                                  controller.listRooms[index].value.userModel!
+                                  controller.listRooms[index].userModel!
                                       .fullName!,
                                   style: GoogleFonts.sarabun(
                                     textStyle: const TextStyle(
@@ -86,7 +86,7 @@ class RecentChats extends StatelessWidget {
                                   width:
                                       MediaQuery.of(context).size.width * 0.45,
                                   child: Text(
-                                    controller.listRooms[index].value
+                                    controller.listRooms[index]
                                         .lastedMessage!.value.text!,
                                     style: GoogleFonts.sarabun(
                                       textStyle: const TextStyle(
@@ -105,9 +105,9 @@ class RecentChats extends StatelessWidget {
                         Obx(
                           () => Column(
                             children: <Widget>[
-                              if (controller.listRooms[index].value
+                              if (controller.listRooms[index]
                                       .lastedMessage!.value.unread!.value &&
-                                  controller.listRooms[index].value
+                                  controller.listRooms[index]
                                           .lastedMessage!.value.senderId! !=
                                       controller.uid)
                                 Container(
@@ -130,7 +130,7 @@ class RecentChats extends StatelessWidget {
                               const SizedBox(height: 5.0),
                               Text(
                                 formatTimeStamp(controller.listRooms[index]
-                                    .value.lastedMessage!.value.time!),
+                                    .lastedMessage!.value.time!),
                                 style: const TextStyle(
                                   color: Colors.grey,
                                   fontSize: 15.0,

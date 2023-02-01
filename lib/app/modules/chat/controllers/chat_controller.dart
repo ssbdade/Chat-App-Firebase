@@ -4,6 +4,7 @@ import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/room_chat_model.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -12,9 +13,12 @@ class ChatController extends GetxController {
 
   int limit = 10;
 
-  Rx<RoomModel> room = Get.arguments;
+  RoomModel room = Get.arguments;
 
   TextEditingController chatController = TextEditingController();
+
+  String uid = FirebaseAuth.instance.currentUser!.uid;
+
   late Stream<QuerySnapshot> chatStream;
 
   ScrollController scrollController = ScrollController();
@@ -26,10 +30,14 @@ class ChatController extends GetxController {
   @override
   void onInit() {
 
-    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.value.roomId).orderBy('time', descending: true).limit(limit).snapshots();
-    chatStream.listen((event)=> getMess2(event));
+    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.roomId).orderBy('time', descending: true).limit(limit).snapshots();
+    chatStream.listen((event) {
+      if(room.roomId != null) {
+        getMess2(event);
+      }
+    });
     scrollController.addListener(() {
-      if(scrollController.position.pixels == scrollController.position.maxScrollExtent) {
+      if(scrollController.position.pixels == scrollController.position.maxScrollExtent && room.roomId != null) {
         getMoreData();
       }
     });
@@ -57,35 +65,63 @@ class ChatController extends GetxController {
   }
 
 
-  void sendMessage(String roomId) async {
-    if (chatController.text != '') {
+  void sendMessage() async {
+    if (chatController.text != '' && room.roomId != null) {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
         text: chatController.text,
         unread: RxBool(true),
         senderId: AppPreference().getUid(),
-        roomId: roomId,
+        roomId: room.roomId,
       );
       listMess.add(messageModel);
-      room.value.lastedMessage!.value = messageModel;
+      room.lastedMessage!.value = messageModel;
       chatController.clear();
       String messId = await MessagesRepo().sendMessage(messageModel);
-      await FirebaseFirestore.instance.doc("roomChats/$roomId").update(
-        {
-          "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
-        }
+      await FirebaseFirestore.instance.doc("roomChats/${room.roomId}").update(
+          {
+            "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
+          }
       );
-
+    }
+    else {
+      MessageModel messageModel = MessageModel(
+        time: Timestamp.now(),
+        text: chatController.text,
+        unread: RxBool(true),
+        senderId: AppPreference().getUid(),
+        roomId: room.roomId,
+      );
+      listMess.add(messageModel);
+      room.lastedMessage!.value = messageModel;
+      chatController.clear();
+      String messId = await MessagesRepo().sendMessage(messageModel);
+      await FirebaseFirestore.instance.collection('roomChats').add(
+          {
+            uid: 1,
+            room.userModel!.userId!: 2,
+            "participant": [uid, room.userModel!.userId],
+            "uid1": uid,
+            "uid2": room.userModel!.userId!,
+            "user1": FirebaseFirestore.instance.collection('users').doc(uid),
+            "user2": FirebaseFirestore.instance.collection('users').doc(room.userModel!.userId!),
+            "lastedMessage": FirebaseFirestore.instance.collection('messages').doc(messId),
+          }
+      );
     }
   }
 
   void getMoreData() {
     limit+=10;
-    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.value.roomId).orderBy("time", descending: true).limit(limit).snapshots();
+    chatStream = FirebaseFirestore.instance.collection('messages').where('roomId', isEqualTo: room.roomId).orderBy("time", descending: true).limit(limit).snapshots();
     chatStream.listen((event)=> getMess2(event));
     Logger.info("call lai");
   }
 
+
+  Future<void> createRoom() async {
+
+  }
 
   void increment() => count.value++;
 }

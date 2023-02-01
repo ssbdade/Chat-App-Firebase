@@ -1,4 +1,3 @@
-import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/user_model.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';

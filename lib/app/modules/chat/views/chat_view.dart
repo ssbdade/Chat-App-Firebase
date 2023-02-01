@@ -25,13 +25,13 @@ class ChatView extends GetView<ChatController> {
                CircleAvatar(
                 radius: 15.0,
                 backgroundImage: NetworkImage(
-                    controller.room.value.userModel!.avatarUrl!,)
+                    controller.room.userModel!.avatarUrl!,)
               ),
               const SizedBox(width: 5.0),
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Text(
-                  controller.room.value.userModel!.fullName!,
+                  controller.room.userModel!.fullName!,
                   style:const TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
@@ -188,7 +188,7 @@ class ChatView extends GetView<ChatController> {
             iconSize: 25.0,
             color: Theme.of(context).primaryColor,
             onPressed: () {
-              controller.sendMessage(controller.room.value.roomId!);
+              controller.sendMessage();
             },
           ),
         ],
