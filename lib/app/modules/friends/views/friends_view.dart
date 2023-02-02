@@ -31,18 +31,23 @@ class FriendsView extends GetView<FriendsController> {
             ),
           ),
           SizedBox(width: 10.w,),
-          Container(
-            width: 60.r,
-            height: 30.r,
-            decoration: BoxDecoration(
-              color: blue,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Center(
-              child: Text(
-                'Accept',
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  color: white,
+          GestureDetector(
+            onTap: () {
+              controller.pushAcceptButton(index);
+            },
+            child: Container(
+              width: 60.r,
+              height: 30.r,
+              decoration: BoxDecoration(
+                color: blue,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Center(
+                child: Text(
+                  'Accept',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    color: white,
+                  ),
                 ),
               ),
             ),
@@ -57,11 +62,13 @@ class FriendsView extends GetView<FriendsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-          itemCount: friendsController.listRequest.length,
-          itemBuilder: (_, index) {
-            return  _buildRequests(context, index);
-          })
+      body: Obx(
+          () => ListView.builder(
+            itemCount: friendsController.listRequest.length,
+            itemBuilder: (_, index) {
+              return  _buildRequests(context, index);
+            }),
+      )
     );
   }
 }

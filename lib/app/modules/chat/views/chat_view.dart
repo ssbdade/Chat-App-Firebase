@@ -1,9 +1,11 @@
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/message_model.dart';
+import 'package:chat/app/util/constants/app_image.dart';
 import 'package:chat/app/util/theme/app_colors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -11,79 +13,83 @@ import 'package:intl/intl.dart';
 import '../controllers/chat_controller.dart';
 
 class ChatView extends GetView<ChatController> {
-  const ChatView({Key? key}) : super(key: key);
+  ChatView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: Colors.white,
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-               CircleAvatar(
-                radius: 15.0,
-                backgroundImage: NetworkImage(
-                    controller.room.userModel!.avatarUrl!,)
-              ),
-              const SizedBox(width: 5.0),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 10),
-                child: Text(
-                  controller.room.userModel!.fullName!,
-                  style:const TextStyle(
-                      fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white
-                  ),
+    return Obx(
+        () => Scaffold(
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            backgroundColor: Colors.blue,
+            title: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                 CircleAvatar(
+                  radius: 15.0,
+                  backgroundImage: NetworkImage(
+                      controller.room.userModel!.avatarUrl!,)
                 ),
-              ),
-            ],
-          ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back_ios),
-            iconSize: 20.0,
-            color: Colors.white,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          elevation: 0.0,
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.info_outlined),
-              iconSize: 30.0,
-              color: Colors.white,
-              onPressed: () {},
-            ),
-          ],
-        ),
-        body: GestureDetector(
-          onTap: () => FocusScope.of(context).unfocus(),
-          child: Column(
-            children: <Widget>[
-              Expanded(
-                child: Container( color: Colors.white,
-                  child: Obx(
-                        () => ListView.builder(
-                      controller: controller.scrollController,
-                      reverse: true,
-                      padding: const EdgeInsets.only(top: 15.0),
-                      itemCount: controller.listMess.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        final MessageModel message = controller.listMess[index];
-                        final bool isMe = message.senderId == AppPreference().getUid();
-                        return _buildMessage(message, isMe,context);
-                      },
+                const SizedBox(width: 5.0),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10),
+                  child: Text(
+                    controller.room.userModel!.fullName!,
+                    style:const TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white
                     ),
                   ),
                 ),
-              ),
-              _buildMessageComposer(context),
+              ],
+            ),
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              iconSize: 20.0,
+              color: Colors.white,
+              onPressed: () {
+                Get.back(result: 'success');
+              },
+            ),
+            elevation: 0.0,
+            actions: <Widget>[
+              if(controller.index.value != -1)
+                IconButton(
+                  icon: friendsIcon[controller.index.value],
+                  iconSize: 30.0,
+                  onPressed: () {
+                    controller.addFriendsButton();
+                  },
+                ),
             ],
           ),
-        )
+          body: GestureDetector(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Column(
+              children: <Widget>[
+                Expanded(
+                  child: Container( color: Colors.white,
+                    child: Obx(
+                          () => ListView.builder(
+                        controller: controller.scrollController,
+                        reverse: true,
+                        padding: const EdgeInsets.only(top: 15.0),
+                        itemCount: controller.listMess.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final MessageModel message = controller.listMess[index];
+                          final bool isMe = message.senderId == AppPreference().getUid();
+                          return _buildMessage(message, isMe,context);
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+                _buildMessageComposer(context),
+              ],
+            ),
+          )
+      ),
     );
   }
 
@@ -217,13 +223,29 @@ class ChatView extends GetView<ChatController> {
             iconSize: 25.0,
             color: Theme.of(context).primaryColor,
             onPressed: () {
-              controller.sendMessage(controller.room.roomId!);
+              controller.sendMessage();
             },
           ),
         ],
       ),
     );
   }
+
+  List<SvgPicture> friendsIcon = [
+    SvgPicture.asset(AppImage.userAdd,
+      color: Colors.white,
+    ),
+    SvgPicture.asset(AppImage.userClock,
+      color: Colors.white,
+    ),
+    SvgPicture.asset(AppImage.userClock,
+      color: Colors.white,
+    ),
+    SvgPicture.asset(AppImage.userCheck,
+      color: Colors.white,
+    )
+  ];
+
 
   String formatTimeStamp(Timestamp timestamp) {
     var date = timestamp.toDate();
