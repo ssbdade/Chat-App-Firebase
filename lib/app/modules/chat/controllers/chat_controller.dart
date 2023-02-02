@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/data/response/messages.dart';
 import 'package:chat/app/models/message_model.dart';
@@ -6,11 +8,16 @@ import 'package:chat/app/modules/common/widgets/app_dialog.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
 
 class ChatController extends GetxController {
   //TODO: Implement ChatController
+
+  File? imageFile;
 
   int limit = 10;
 
@@ -111,12 +118,48 @@ class ChatController extends GetxController {
     super.onClose();
   }
 
+  Future getImage(String roomId) async {
+    ImagePicker _picker = ImagePicker();
+
+    await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
+      if (xFile != null) {
+        imageFile = File(xFile.path);
+        uploadImage(roomId);
+      }
+    });
+  }
+
+  Future uploadImage(String roomId) async {
+    String fileName = Uuid().v1();
+    var ref = FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
+    var uploadTask = await ref.putFile(imageFile!);
+    String imageUrl =  await uploadTask.ref.getDownloadURL();
+
+    MessageModel messageModel = MessageModel(
+      time: Timestamp.now(),
+      text: imageUrl,
+      type: "img",
+      unread: RxBool(true),
+      senderId: AppPreference().getUid(),
+      roomId: roomId,
+    );
+    listMess.add(messageModel);
+    chatController.clear();
+    String messId = await MessagesRepo().sendMessage(messageModel);
+    await FirebaseFirestore.instance.doc("roomChats/$roomId").update(
+        {
+          "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
+        }
+    );
+  }
+
   void sendMessage() async {
     if (chatController.text != '' && room.roomId != null) {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
         text: chatController.text,
         unread: RxBool(true),
+        type: "text",
         senderId: AppPreference().getUid(),
         roomId: room.roomId,
       );
@@ -328,5 +371,3 @@ class ChatController extends GetxController {
   }
 
 }
-
-

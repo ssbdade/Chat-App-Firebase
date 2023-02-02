@@ -5,6 +5,7 @@ class MessageModel {
   String? roomId;
   String? senderId;
   String? text;
+  String? type;
   Timestamp? time;
   RxBool? unread;
 
@@ -14,6 +15,7 @@ class MessageModel {
         this.roomId,
         this.senderId,
         this.text,
+        this.type,
         this.time,
         this.unread
       });
@@ -24,6 +26,7 @@ class MessageModel {
       senderId: map["senderId"],
       roomId: map["roomId"],
       text: map["text"],
+      type: map["type"],
       time: map["time"],
       unread: RxBool(map["unread"]),
     );
@@ -34,6 +37,7 @@ class MessageModel {
       'senderId': senderId,
       'roomId': roomId,
       'text': text,
+      'type':type,
       'time': time,
       'unread': unread!.value,
     };

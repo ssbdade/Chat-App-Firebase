@@ -94,7 +94,7 @@ class ChatView extends GetView<ChatController> {
   }
 
   _buildMessage(MessageModel message, bool isMe, BuildContext context) {
-    final Container msg = Container(
+    final Container msg = message.type == "text" ? Container(
       margin: isMe
           ? const EdgeInsets.only(
         top: 8.0,
@@ -142,6 +142,35 @@ class ChatView extends GetView<ChatController> {
           ),
         ],
       ),
+    ):Container(
+      margin: isMe
+          ? const EdgeInsets.only(
+        top: 8.0,
+        bottom: 8.0,
+        left: 80.0,
+      )
+          :const EdgeInsets.only(
+          top: 8.0,
+          bottom: 8.0,
+          right: 20
+      ),
+      padding:const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
+      width: MediaQuery.of(context).size.width * 0.75,
+      child:InkWell(
+        onTap: () => Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (_) => ShowImage(
+              imageUrl: message.text!,
+
+            ),
+          ),
+        ),
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height / 2.5,
+          width: MediaQuery.of(context).size.height,
+          child: message.text != "" ? Image.network(message.text!,fit: BoxFit.cover,):const CircularProgressIndicator(),
+        ),
+      ),
     );
     return msg;
   }
@@ -158,7 +187,7 @@ class ChatView extends GetView<ChatController> {
             iconSize: 25.0,
             color: Theme.of(context).primaryColor,
             onPressed: () {
-
+              controller.getImage(controller.room.roomId!);
             },
           ),
           Expanded(
@@ -221,5 +250,35 @@ class ChatView extends GetView<ChatController> {
   String formatTimeStamp(Timestamp timestamp) {
     var date = timestamp.toDate();
     return DateFormat('hh:mm a').format(date);
+  }
+
+}
+class ShowImage extends StatelessWidget {
+  final String imageUrl;
+
+  const ShowImage({required this.imageUrl, Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final Size size = MediaQuery.of(context).size;
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.black,
+        leading: IconButton(
+          icon: const Icon(Icons.close),
+          color: Colors.white,
+          onPressed: (){
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
+      body: Container(
+        height: size.height,
+        width: size.width,
+        color: Colors.black,
+        child: Image.network(imageUrl),
+      ),
+    );
   }
 }
