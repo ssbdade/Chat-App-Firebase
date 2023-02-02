@@ -25,7 +25,10 @@ class ChatController extends GetxController {
       FirebaseFirestore.instance.collection('messages');
   CollectionReference requestRef =
       FirebaseFirestore.instance.collection('friendRequest');
-  CollectionReference roomRef = FirebaseFirestore.instance.collection('rooms');
+  CollectionReference roomRef = FirebaseFirestore.instance.collection('roomChats');
+
+  late DocumentReference currentUserRef;
+  late DocumentReference theirUserRef;
 
   late Stream<QuerySnapshot> chatStream;
 
@@ -39,24 +42,25 @@ class ChatController extends GetxController {
 
   @override
   void onInit() async {
+    currentUserRef = FirebaseFirestore.instance.doc('users/$uid');
+    theirUserRef = FirebaseFirestore.instance.doc('users/${room.userModel!.userId}');
     if (uid != room.userModel!.userId) {
       if (room.isFriends!.value) {
-        index.value = 2;
+        index.value = 3;
       } else {
         await requestRef
-            .where('receiverId', isEqualTo: room.userModel!.userId)
+            .where('receiver', isEqualTo: theirUserRef)
             .where('sender',
-                isEqualTo: FirebaseFirestore.instance.doc('users/$uid'))
+                isEqualTo: currentUserRef)
             .get()
             .then((value) async {
           if (value.size == 1) {
-            index.value = 1;
+            index.value = 2;
           } else {
             await requestRef
-                .where('receiverId', isEqualTo: uid)
+                .where('receiver', isEqualTo: currentUserRef)
                 .where('sender',
-                    isEqualTo: FirebaseFirestore.instance
-                        .doc('users/${room.userModel!.userId}')).get()
+                    isEqualTo: theirUserRef).get()
                 .then((value) {
               if (value.size == 1) {
                 index.value = 2;
@@ -166,7 +170,7 @@ class ChatController extends GetxController {
     switch (index.value) {
       case 0:
         {
-          //INVITE ADD FRIENDS REQUEST
+          //CRATE ADD FRIENDS REQUEST
           Get.dialog(
             _buildInviteFriendsAlert(),
           );
@@ -175,21 +179,44 @@ class ChatController extends GetxController {
 
       case 1:
         {
-          //ACCEPT FRIENDS REQUEST
+          //RESPONSE OUR REQUEST
           Get.dialog(
-            _buildThierReqAlert(),
+            _buildOurReqAlert(),
           );
         }
         break;
 
       case 2:
         {
+          //RESPONSE THIER REQUEST
           Get.dialog(
-            _buildOurReqAlert(),
+            _buildThierReqAlert(),
+          );
+        }
+        break;
+
+      case 3:
+        {
+          Get.dialog(
+            _buildRemoveFriendsAlert(),
           );
         }
         break;
     }
+  }
+
+  _buildRemoveFriendsAlert() {
+    return AppDialog(
+      title: 'Bạn có muốn xóa người này khỏi dánh sách bạn bè không?',
+      onTapYes: () {
+        removeFriends();
+        Get.back();
+      },
+
+      onTapNo: () {
+        Get.back();
+      },
+    );
   }
 
   _buildInviteFriendsAlert() {
@@ -208,12 +235,14 @@ class ChatController extends GetxController {
 
   _buildThierReqAlert() {
     return AppDialog(
-      title: 'Bạn có muốn xóa lời mời kết bạn tới người này không?',
+      title: 'Bạn có muốn chấp nhận lời mời kết bạn từ người này không?',
       onTapYes: () {
+        acceptFriendsRequest();
         Get.back();
       },
-
+      rightTitle: 'XÓA',
       onTapNo: () {
+        deleteThierRequest();
         Get.back();
       },
     );
@@ -221,9 +250,9 @@ class ChatController extends GetxController {
 
   _buildOurReqAlert() {
     return AppDialog(
-      title: 'Bạn có muốn chấp nhận lời mời kết bạn từ người này không?',
-      delete: 'XOÁ',
+      title: 'Bạn có muốn xóa lời mời kết bạn tới người này không?',
       onTapYes: () {
+        deleteOurRequest();
         Get.back();
       },
       onTapNo: () {
@@ -237,41 +266,67 @@ class ChatController extends GetxController {
   void createFriendsRequest() async {
     await requestRef.add({
       'pending': true,
-      'receiverId': uid,
-      'sender': userRef.doc(room.userModel!.userId!),
+      'receiver': theirUserRef,
+      'sender': currentUserRef,
     });
     index.value = 1;
   }
 
   void acceptFriendsRequest() async {
-    // room.isFriends!.value = true;
-    // roomRef.doc(room.roomId).update({
-    //   'isFriends': true,
-    // });
-    // // WriteBatch batch = FirebaseFirestore.instance.batch();
-    // // await requestRef.where('receiverId', isEqualTo: room.userModel!.userId)
-    // //     .where('sender',
-    // //     isEqualTo: FirebaseFirestore.instance.doc('users/$uid'))
-    // //     .get()
-    // //     .then((value) {
-    // //       value.docs.forEach((document) {
-    // //         batch.delete(document.reference);
-    // //       });
-    // // });
+    room.isFriends!.value = true;
+    roomRef.doc(room.roomId).update({
+      'isFriends': true,
+    });
+    await requestRef.where('receiver', isEqualTo: currentUserRef)
+        .where('sender',
+        isEqualTo: theirUserRef)
+        .get()
+        .then((value) {
+          value.docs.forEach((document) {
+            document.reference.delete();
+          });
+    });
+    index.value = 3;
   }
 
   void deleteThierRequest() async {
-    WriteBatch batch = FirebaseFirestore.instance.batch();
-    await requestRef.where('receiverId', isEqualTo: room.userModel!.userId)
+    await requestRef.where('receiver', isEqualTo: currentUserRef)
         .where('sender',
-        isEqualTo: FirebaseFirestore.instance.doc('users/$uid'))
+        isEqualTo: theirUserRef)
         .get()
         .then((value) {
       value.docs.forEach((document) {
-        batch.delete(document.reference);
+        print(document.reference);
+        document.reference.delete();
       });
     });
+    index.value = 0;
   }
 
+  void deleteOurRequest() async {
+    print('delete our');
+    await requestRef.where('receiver', isEqualTo: theirUserRef)
+        .where('sender',
+        isEqualTo: currentUserRef)
+        .get()
+        .then((value) {
+      print(value);
+      value.docs.forEach((document) {
+        print(document.reference);
+        document.reference.delete();
+      });
+    });
+    index.value = 0;
+  }
+
+  void removeFriends() async {
+    room.isFriends!.value = false;
+    roomRef.doc(room.roomId).update({
+      'isFriends': false,
+    });
+    index.value = 0;
+  }
 
 }
+
+

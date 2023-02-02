@@ -47,7 +47,8 @@ class HomeController extends GetxController {
         UserModel temp = UserModel.fromMap(value.data());
         if(element["lastedMessage"] != null) {
           DocumentReference<Map<String, dynamic>> message = element["lastedMessage"];
-          await message.get().then((lastMess) {listTemp.add(RoomModel.fromMap(element, temp, element.id, MessageModel.fromMap(lastMess)));});
+          await message.get().then((lastMess) {
+            listTemp.add(RoomModel.fromMap(element, temp, element.id, MessageModel.fromMap(lastMess)));});
           print(element['participant']);
           // listTemp.add(RoomModel.fromMap(element, temp, element.id, null));
         }

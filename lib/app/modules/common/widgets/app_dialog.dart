@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
 
 class AppDialog extends StatelessWidget {
-  const AppDialog({Key? key, this.title, this.onTapYes, this.onTapNo, this.delete})
+  const AppDialog(
+      {Key? key,
+      this.title,
+      this.onTapYes,
+      this.onTapNo,
+      this.rightTitle,
+      this.leftTitle})
       : super(key: key);
   final String? title;
   final Function()? onTapYes;
   final Function()? onTapNo;
-  final String? delete;
+  final String? rightTitle;
+  final String? leftTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +27,9 @@ class AppDialog extends StatelessWidget {
       actions: [
         GestureDetector(
           onTap: onTapYes,
-          child: const Text(
-            'CÓ',
-            style: TextStyle(
+          child: Text(
+            leftTitle ?? 'CÓ',
+            style: const TextStyle(
               fontSize: 18,
               color: Colors.blue,
             ),
@@ -31,7 +38,7 @@ class AppDialog extends StatelessWidget {
         GestureDetector(
           onTap: onTapNo,
           child: Text(
-            delete ?? 'KHÔNG',
+            rightTitle ?? 'KHÔNG',
             style: const TextStyle(
               color: Colors.red,
               fontSize: 18,
