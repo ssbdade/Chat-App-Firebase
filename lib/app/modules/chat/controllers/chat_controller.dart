@@ -177,6 +177,7 @@ class ChatController extends GetxController {
         unread: RxBool(true),
         senderId: AppPreference().getUid(),
         roomId: room.roomId,
+        type: 'text',
       );
       listMess.add(messageModel);
       room.lastedMessage!.value = messageModel;
@@ -188,11 +189,14 @@ class ChatController extends GetxController {
         "participant": [uid, room.userModel!.userId],
         "uid1": uid,
         "uid2": room.userModel!.userId!,
+        'isFriends': false,
         "user1": userRef.doc(uid),
         "user2": userRef.doc(room.userModel!.userId!),
         "lastedMessage":
             FirebaseFirestore.instance.collection('messages').doc(messId),
-      });
+      }).then((value) => messageRef.doc(messId).update({
+        'roomId': value.id,
+      }));
     }
   }
 
