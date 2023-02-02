@@ -1,4 +1,5 @@
 import 'package:chat/app/modules/home/controllers/home_controller.dart';
+import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -9,6 +10,7 @@ import 'package:intl/intl.dart';
 
 class RecentChats extends StatelessWidget {
   final HomeController controller = Get.find();
+  final MessageController messageController = Get.find();
 
   RecentChats({super.key});
 

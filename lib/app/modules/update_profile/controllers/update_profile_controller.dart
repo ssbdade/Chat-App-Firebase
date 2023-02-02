@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:chat/app/data/app_preference.dart';
 import 'package:chat/app/models/models.dart';
+import 'package:chat/app/routes/app_pages.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:chat/app/util/constants/constants.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -52,7 +53,34 @@ class UpdateProfileController extends GetxController {
     showDialog(context: context, builder: (__) {
       return success ? const CircularProgressIndicator() :
           AlertDialog(
-            content: Text(KeyConst.success.tr),
+            content: Container(
+              height: 70,
+              width: 70,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(KeyConst.success.tr),
+                  InkWell(
+                    onTap: (){
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: Colors.blue
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left: 30,right: 30,bottom: 5,top: 5),
+                        child: Text(
+                          KeyConst.ok.tr,style:const TextStyle(color: Colors.white),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
           );
     });
   }
