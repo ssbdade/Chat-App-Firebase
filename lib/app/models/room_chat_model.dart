@@ -42,6 +42,7 @@ class RoomModel {
       "user2": userModel2.toMap(),
       "participant": [uid1, uid2],
       'lastedMessage': lastedMessage!.value,
+      'isFriends': isFriends!.value,
     };
   }
 }

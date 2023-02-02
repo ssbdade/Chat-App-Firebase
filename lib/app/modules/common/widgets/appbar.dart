@@ -1,13 +1,16 @@
 import 'package:chat/app/data/response/search.dart';
+import 'package:chat/app/modules/account/controllers/account_controller.dart';
 import 'package:chat/app/modules/search/views/search_view.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:chat/app/util/common/screen_util.dart';
+import 'package:chat/app/util/constants/textconst.dart';
 import 'package:chat/app/util/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 AppBar appBar(BuildContext context) {
+  final AccountController accountController = Get.put(AccountController());
   return AppBar(
     automaticallyImplyLeading: false,
     backgroundColor: Colors.white,
@@ -29,19 +32,10 @@ AppBar appBar(BuildContext context) {
             Search search = Search();
             search.getUserList();
           },
-          child: Container(
-            width: 40.r,
-            height: 40.r,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              //color: HexColor("#7D9EBD"),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: Colors.white,
-                  width: 2.0,
-                ),
-                color: red
-            ),
+          child: CircleAvatar(
+            radius: 20.0,
+            backgroundImage:
+            NetworkImage(accountController.userModel.value.avatarUrl!),
           ),
         ),
         SizedBox(width: width(7)),
@@ -62,7 +56,7 @@ AppBar appBar(BuildContext context) {
                         padding: EdgeInsets.symmetric(vertical: 8.h, horizontal: 12.w),
                           child: Icon(Icons.search),
                       ),
-                      Text('Tìm kiếm bạn bè, tin nhắn...'),
+                      Text(KeyConst.searchFriends.tr),
                     ],
                   )
               ),

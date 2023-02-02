@@ -187,7 +187,7 @@ class ChatView extends GetView<ChatController> {
             iconSize: 25.0,
             color: Theme.of(context).primaryColor,
             onPressed: () {
-              controller.getImage(controller.room.roomId!);
+              controller.getImage();
             },
           ),
           Expanded(

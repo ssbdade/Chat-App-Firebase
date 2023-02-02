@@ -118,39 +118,67 @@ class ChatController extends GetxController {
     super.onClose();
   }
 
-  Future getImage(String roomId) async {
+  Future getImage() async {
     ImagePicker _picker = ImagePicker();
 
     await _picker.pickImage(source: ImageSource.gallery).then((xFile) {
       if (xFile != null) {
         imageFile = File(xFile.path);
-        uploadImage(roomId);
+        uploadImage();
       }
     });
   }
 
-  Future uploadImage(String roomId) async {
+  Future uploadImage() async {
     String fileName = Uuid().v1();
     var ref = FirebaseStorage.instance.ref().child("images").child("$fileName.jpg");
     var uploadTask = await ref.putFile(imageFile!);
     String imageUrl =  await uploadTask.ref.getDownloadURL();
 
-    MessageModel messageModel = MessageModel(
-      time: Timestamp.now(),
-      text: imageUrl,
-      type: "img",
-      unread: RxBool(true),
-      senderId: AppPreference().getUid(),
-      roomId: roomId,
-    );
-    listMess.add(messageModel);
-    chatController.clear();
-    String messId = await MessagesRepo().sendMessage(messageModel);
-    await FirebaseFirestore.instance.doc("roomChats/$roomId").update(
-        {
-          "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
-        }
-    );
+   if(imageUrl != '' && room.roomId != null){
+     MessageModel messageModel = MessageModel(
+       time: Timestamp.now(),
+       text: imageUrl,
+       type: "img",
+       unread: RxBool(true),
+       senderId: AppPreference().getUid(),
+       roomId: room.roomId,
+     );
+     listMess.add(messageModel);
+     chatController.clear();
+     String messId = await MessagesRepo().sendMessage(messageModel);
+     await FirebaseFirestore.instance.doc("roomChats/${room.roomId}").update(
+         {
+           "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
+         }
+     );
+   }
+   else {
+     MessageModel messageModel = MessageModel(
+       time: Timestamp.now(),
+       text: imageUrl,
+       unread: RxBool(true),
+       type: "img",
+       senderId: AppPreference().getUid(),
+       roomId: room.roomId,
+     );
+     listMess.add(messageModel);
+     room.lastedMessage!.value = messageModel;
+     chatController.clear();
+     String messId = await MessagesRepo().sendMessage(messageModel);
+     await roomRef.add({
+       uid: 1,
+       room.userModel!.userId!: 2,
+       "participant": [uid, room.userModel!.userId],
+       "uid1": uid,
+       "uid2": room.userModel!.userId!,
+       "user1": userRef.doc(uid),
+       "user2": userRef.doc(room.userModel!.userId!),
+       'isFriends': false,
+       "lastedMessage":
+       FirebaseFirestore.instance.collection('messages').doc(messId),
+     });
+   }
   }
 
   void sendMessage() async {

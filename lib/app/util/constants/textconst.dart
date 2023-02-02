@@ -16,5 +16,7 @@ abstract class KeyConst {
   static const String email = 'Email';
   static const String updatePro5 = 'Update_Profile';
   static const String update = 'Update';
+  static const String ok = 'OK';
   static const String success = 'Success';
+  static const String searchFriends = 'Tìm kiếm bạn bè, tin nhắn...';
 }
