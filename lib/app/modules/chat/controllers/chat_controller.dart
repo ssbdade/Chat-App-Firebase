@@ -154,49 +154,51 @@ class ChatController extends GetxController {
   }
 
   void sendMessage() async {
-    if (chatController.text != '' && room.roomId != null) {
-      MessageModel messageModel = MessageModel(
-        time: Timestamp.now(),
-        text: chatController.text,
-        unread: RxBool(true),
-        type: "text",
-        senderId: AppPreference().getUid(),
-        roomId: room.roomId,
-      );
-      listMess.add(messageModel);
-      room.lastedMessage!.value = messageModel;
-      chatController.clear();
-      String messId = await MessagesRepo().sendMessage(messageModel);
-      await FirebaseFirestore.instance.doc("roomChats/${room.roomId}").update({
-        "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
-      });
-    } else {
-      MessageModel messageModel = MessageModel(
-        time: Timestamp.now(),
-        text: chatController.text,
-        unread: RxBool(true),
-        senderId: AppPreference().getUid(),
-        roomId: room.roomId,
-        type: 'text',
-      );
-      listMess.add(messageModel);
-      room.lastedMessage!.value = messageModel;
-      chatController.clear();
-      String messId = await MessagesRepo().sendMessage(messageModel);
-      await roomRef.add({
-        uid: 1,
-        room.userModel!.userId!: 2,
-        "participant": [uid, room.userModel!.userId],
-        "uid1": uid,
-        "uid2": room.userModel!.userId!,
-        'isFriends': false,
-        "user1": userRef.doc(uid),
-        "user2": userRef.doc(room.userModel!.userId!),
-        "lastedMessage":
-            FirebaseFirestore.instance.collection('messages').doc(messId),
-      }).then((value) => messageRef.doc(messId).update({
-        'roomId': value.id,
-      }));
+    if(chatController.text != '') {
+      if (room.roomId != null) {
+        MessageModel messageModel = MessageModel(
+          time: Timestamp.now(),
+          text: chatController.text,
+          unread: RxBool(true),
+          type: "text",
+          senderId: AppPreference().getUid(),
+          roomId: room.roomId,
+        );
+        listMess.add(messageModel);
+        room.lastedMessage!.value = messageModel;
+        chatController.clear();
+        String messId = await MessagesRepo().sendMessage(messageModel);
+        await FirebaseFirestore.instance.doc("roomChats/${room.roomId}").update({
+          "lastedMessage": FirebaseFirestore.instance.doc("messages/$messId"),
+        });
+      } else {
+        MessageModel messageModel = MessageModel(
+          time: Timestamp.now(),
+          text: chatController.text,
+          unread: RxBool(true),
+          senderId: AppPreference().getUid(),
+          roomId: room.roomId,
+          type: 'text',
+        );
+        listMess.add(messageModel);
+        room.lastedMessage!.value = messageModel;
+        chatController.clear();
+        String messId = await MessagesRepo().sendMessage(messageModel);
+        await roomRef.add({
+          uid: 1,
+          room.userModel!.userId!: 2,
+          "participant": [uid, room.userModel!.userId],
+          "uid1": uid,
+          "uid2": room.userModel!.userId!,
+          'isFriends': false,
+          "user1": userRef.doc(uid),
+          "user2": userRef.doc(room.userModel!.userId!),
+          "lastedMessage":
+          FirebaseFirestore.instance.collection('messages').doc(messId),
+        }).then((value) => messageRef.doc(messId).update({
+          'roomId': value.id,
+        }));
+      }
     }
   }
 

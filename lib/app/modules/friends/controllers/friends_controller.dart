@@ -78,6 +78,7 @@ class FriendsController extends GetxController {
   }
 
   void acceptFriendsRequest(int index) {
+    print(index + 10000000000000000);
     theirUserRef = FirebaseFirestore.instance.doc('users/${listUser[index].userId}');
     roomRef
         .where("participant", isEqualTo: [userId, listUser[index].userId])
