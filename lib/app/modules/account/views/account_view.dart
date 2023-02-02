@@ -22,15 +22,23 @@ class AccountView extends GetView<AccountController> {
             color: white,
             child: Row(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: black,
-                    shape: BoxShape.circle,
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: CircleAvatar(
+                    radius: 35.0,
+                    backgroundImage:
+                    NetworkImage(controller.userModel.value.avatarUrl!),
                   ),
-                  margin: EdgeInsets.symmetric(horizontal: 15),
-                  height: 70.r,
-                  width: 70.r,
                 ),
+                SizedBox(width: 15.0),
+                // Container(
+                //   margin: const EdgeInsets.symmetric(horizontal: 15),
+                //   height: 70.r,
+                //   width: 70.r,
+                //   child: CircleAvatar(
+                //     child: Image.network(controller.userModel.value.avatarUrl!,fit: BoxFit.cover,),
+                //   ),
+                // ),
                 Obx(
                   () => Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

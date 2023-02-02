@@ -1,4 +1,4 @@
-import 'package:chat/app/modules/home/controllers/home_controller.dart';
+
 import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -29,12 +29,12 @@ class FavoriteContacts extends StatelessWidget {
                           CircleAvatar(
                             radius: 35.0,
                             backgroundImage:
-                            NetworkImage("https://static.wixstatic.com/media/84a5c9_463b60f413b64f8f97775a258e69eab3~mv2.jpg/v1/fill/w_640,h_812,al_c,q_85,usm_0.66_1.00_0.01,enc_auto/84a5c9_463b60f413b64f8f97775a258e69eab3~mv2.jpg"),
+                            NetworkImage(controller.listFriends[index].avatarUrl!),
                           ),
-                          SizedBox(height: 6.0),
+                          const SizedBox(height: 6.0),
                           Text(
                             controller.listFriends[index].fullName!,
-                            style: TextStyle(
+                            style: const TextStyle(
                               color: Colors.blueGrey,
                               fontSize: 16.0,
                               fontWeight: FontWeight.w600,

@@ -1,4 +1,5 @@
 import 'package:chat/app/modules/home/controllers/home_controller.dart';
+import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:chat/app/routes/app_pages.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ import 'package:google_fonts/google_fonts.dart';
 
 class RecentChats extends StatelessWidget {
   final HomeController controller = Get.find();
+  final MessageController messageController = Get.find();
 
   RecentChats({super.key});
 
