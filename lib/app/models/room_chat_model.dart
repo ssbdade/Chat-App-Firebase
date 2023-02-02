@@ -1,5 +1,6 @@
-import 'package:chat/app/data/app_preference.dart';
+import 'package:chat/app/models/message_model.dart';
 import 'package:chat/app/models/user_model.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 class RoomModel {
   String? uid1;
@@ -7,6 +8,8 @@ class RoomModel {
   UserModel? userModel;
   String? roomId;
   List<String>? participant;
+  Rx<MessageModel>? lastedMessage;
+  RxBool? isFriends;
 
   RoomModel({
     this.uid1,
@@ -14,16 +17,20 @@ class RoomModel {
     this.userModel,
     this.roomId,
     this.participant,
+    this.lastedMessage,
+    this.isFriends,
 });
 
 
-  factory RoomModel.fromMap(map, UserModel user,String roomId) {
+  factory RoomModel.fromMap(map, UserModel user,String roomId, MessageModel? messageModel) {
     return RoomModel(
       uid1: map["uid1"],
       uid2: map["uid2"],
       userModel: user,
       roomId: roomId,
       participant: [map["uid1"], map["uid2"]],
+      lastedMessage: Rx<MessageModel>(messageModel!),
+      isFriends: RxBool(map['isFriends']),
     );
   }
 
@@ -34,6 +41,7 @@ class RoomModel {
       "user1": userModel1.toMap(),
       "user2": userModel2.toMap(),
       "participant": [uid1, uid2],
+      'lastedMessage': lastedMessage!.value,
     };
   }
 }

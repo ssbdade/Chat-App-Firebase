@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 
 class MessageModel {
   String? roomId;
@@ -6,7 +7,7 @@ class MessageModel {
   String? text;
   String? type;
   Timestamp? time;
-  bool? unread;
+  RxBool? unread;
 
 
   MessageModel(
@@ -20,13 +21,14 @@ class MessageModel {
       });
 
   factory MessageModel.fromMap(map) {
+
     return MessageModel(
       senderId: map["senderId"],
       roomId: map["roomId"],
       text: map["text"],
       type: map["type"],
       time: map["time"],
-      unread: map["unread"],
+      unread: RxBool(map["unread"]),
     );
   }
 
@@ -37,7 +39,7 @@ class MessageModel {
       'text': text,
       'type':type,
       'time': time,
-      'unread': unread,
+      'unread': unread!.value,
     };
   }
 

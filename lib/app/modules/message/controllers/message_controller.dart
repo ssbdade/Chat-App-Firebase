@@ -37,7 +37,6 @@ class MessageController extends GetxController {
 
       }
     });
-    print(1);
     super.onInit();
   }
 
@@ -51,15 +50,6 @@ class MessageController extends GetxController {
     listMess.value = listTemp;
   }
 
-  @override
-  void onReady() {
-    super.onReady();
-  }
-
-  @override
-  void onClose() {
-    super.onClose();
-  }
 
 
   void sendMessage(String roomId) {
@@ -67,7 +57,7 @@ class MessageController extends GetxController {
       MessageModel messageModel = MessageModel(
         time: Timestamp.now(),
         text: messController.text,
-        unread: false,
+        unread: RxBool(false),
         senderId: AppPreference().getUid(),
         roomId: roomId,
       );

@@ -1,7 +1,6 @@
 import 'package:chat/app/modules/account/views/account_view.dart';
 import 'package:chat/app/modules/common/widgets/widgets.dart';
 import 'package:chat/app/modules/friends/views/friends_view.dart';
-import 'package:chat/app/modules/message/controllers/message_controller.dart';
 import 'package:chat/app/modules/message/views/message_view.dart';
 import 'package:chat/app/util/common/logger.dart';
 import 'package:flutter/material.dart';
