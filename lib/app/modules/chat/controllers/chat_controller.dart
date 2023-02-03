@@ -177,7 +177,9 @@ class ChatController extends GetxController {
        'isFriends': false,
        "lastedMessage":
        FirebaseFirestore.instance.collection('messages').doc(messId),
-     });
+     }).then((value) => messageRef.doc(messId).update({
+       'roomId': value.id,
+     }));
    }
   }
 
