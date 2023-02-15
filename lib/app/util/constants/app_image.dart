@@ -8,4 +8,5 @@ abstract class AppImage {
   static const String userCheck = 'assets/icons/user-check-solid.svg';
   static const String userClock = 'assets/icons/user-clock-solid.svg';
   static const String userXMark = 'assets/icons/user-xmark-solid.svg';
+  static const String bubbleChat = 'assets/icons/comments-solid.svg';
 }

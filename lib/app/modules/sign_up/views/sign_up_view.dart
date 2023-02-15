@@ -2,6 +2,7 @@ import 'package:chat/app/helpers/helpers.dart';
 import 'package:chat/app/modules/common/widgets/widgets.dart';
 import 'package:chat/app/util/constants/app_image.dart';
 import 'package:chat/app/util/constants/textconst.dart';
+import 'package:chat/app/util/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,38 +17,35 @@ class SignUpView extends GetView<SignUpController> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          key: controller.formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  Image.asset(
-                    AppImage.loginBg,
-                    height: 188.h,
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      left: 25.w,
-                      child: SvgPicture.asset(AppImage.logo2)),
-                ],
+      backgroundColor: blue,
+      body: Form(
+        key: controller.formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+              child: SvgPicture.asset(AppImage.bubbleChat,
+                color: Colors.white,
+                height: 120.h,
+                alignment: Alignment.center,
               ),
-              Padding(
+            ),
+            Container(
+              decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(40.r))
+              ),
+              child: Padding(
                 padding: EdgeInsets.only(left: 25.w, right: 25.w),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 5.h,
+                      height: 25.h,
                     ),
-                    SizedBox(
-                      width: 277,
-                      child: Text(
-                        KeyConst.welcomeToSignBizflyChat.tr,
-                        style: theme.textTheme.headline1,
-                      ),
+                    Text(
+                      KeyConst.signUp.tr,
+                      style: theme.textTheme.headline1,
                     ),
                     SizedBox(
                       height: 25.h,
@@ -88,7 +86,7 @@ class SignUpView extends GetView<SignUpController> {
                       height: 16.h,
                     ),
                     Obx(
-                      () => FormInputField(
+                          () => FormInputField(
                         controller: controller.passwordCtrl,
                         hintText: KeyConst.password.tr,
                         obscureText: controller.obscureText.value,
@@ -96,7 +94,7 @@ class SignUpView extends GetView<SignUpController> {
                         suffixIcon: GestureDetector(
                             onTap: () {
                               controller.obscureText.value =
-                                  !controller.obscureText.value;
+                              !controller.obscureText.value;
                             },
                             child: controller.obscureText.value
                                 ? const Icon(Icons.visibility)
@@ -111,7 +109,7 @@ class SignUpView extends GetView<SignUpController> {
                       height: 16.h,
                     ),
                     Obx(
-                      () => FormInputField(
+                          () => FormInputField(
                         controller: controller.confirmPasswordCtrl,
                         hintText: KeyConst.repeatPassword.tr,
                         obscureText: controller.obscureText.value,
@@ -119,7 +117,7 @@ class SignUpView extends GetView<SignUpController> {
                         suffixIcon: GestureDetector(
                             onTap: () {
                               controller.obscureText.value =
-                                  !controller.obscureText.value;
+                              !controller.obscureText.value;
                             },
                             child: controller.obscureText.value
                                 ? const Icon(Icons.visibility)
@@ -156,8 +154,9 @@ class SignUpView extends GetView<SignUpController> {
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+
+          ],
         ),
       ),
     );

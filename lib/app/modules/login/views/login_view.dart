@@ -19,45 +19,35 @@ class LoginView extends GetView<LoginController> {
   Widget build(BuildContext context) {
     var theme = Theme.of(context);
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Form(
-          key: controller.formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
-                children: [
-                  Image.asset(
-                    AppImage.loginBg,
-                    height: 188.h,
-                  ),
-                  Positioned(
-                      bottom: 0,
-                      left: 25.w,
-                      child: SvgPicture.asset(AppImage.logo2)),
-                ],
+      backgroundColor: blue,
+      body: Form(
+        key: controller.formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Expanded(
+                child: SvgPicture.asset(AppImage.bubbleChat,
+                  color: Colors.white,
+                  height: 120.h,
+                  alignment: Alignment.center,
+                ),
+            ),
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.only(topLeft: Radius.circular(40.r))
               ),
-              Padding(
+              child: Padding(
                 padding: EdgeInsets.only(left: 25.w, right: 25.w),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: 5.h,
-                    ),
-                    SizedBox(
-                      width: 277,
-                      child: Text(
-                        KeyConst.welcomeToBizflyChat.tr,
-                        style: theme.textTheme.headline1,
-                      ),
-                    ),
-                    SizedBox(
-                      height: 13.h,
+                      height: 40.h,
                     ),
                     Text(
-                      KeyConst.pleaseLogin.tr,
-                      style: theme.textTheme.headline2,
+                      KeyConst.login.tr,
+                      style: theme.textTheme.headline1,
                     ),
                     SizedBox(
                       height: 25.h,
@@ -158,12 +148,17 @@ class LoginView extends GetView<LoginController> {
                           ],
                         ),
                       ),
+
                     ),
+
+                    SizedBox(
+                      height: 40.h,
+                    )
                   ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

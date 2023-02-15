@@ -26,7 +26,11 @@ class SplashView extends GetView<SplashController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SvgPicture.asset(AppImage.logo),
+              SvgPicture.asset(AppImage.bubbleChat,
+                color: Colors.white,
+                height: 120.h,
+                alignment: Alignment.center,
+              ),
               SizedBox(
                 height: 18.h,
               ),
@@ -36,7 +40,7 @@ class SplashView extends GetView<SplashController> {
                 },
                 child: SizedBox(
                   width: 277.w,
-                  child: Text('Chào mừng bạn đến với Bizfly Chat',
+                  child: Text('Chào mừng bạn đến với MY Chat',
                     textAlign: TextAlign.center,
                     style: theme.textTheme.headline1!.copyWith(
                       color: AppThemes.white,

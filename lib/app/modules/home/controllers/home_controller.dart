@@ -28,7 +28,7 @@ class HomeController extends GetxController {
     super.onInit();
     getUserInfo();
     listRooms = <RoomModel>[].obs;
-    roomStream = FirebaseFirestore.instance.collection('roomChats').where(uid, isGreaterThan: 0).limit(limit).snapshots();
+    roomStream = FirebaseFirestore.instance.collection('roomChats').where('participant', arrayContains: uid).limit(limit).snapshots();
     roomStream.listen((event) {getRoom(event);});
   }
 
